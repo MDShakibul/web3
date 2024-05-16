@@ -1,0 +1,381 @@
+[
+    {
+        "id": "binance-usd",
+        "address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        "symbol": "BUSD",
+        "decimals": 18
+    },
+    {
+        "id": "binancecoin",
+        "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+        "symbol": "BNB",
+        "decimals": 18
+    },
+    {
+        "id": "coinracer",
+        "address": "0xfbb4f2f342c6daab63ab85b0226716c4d1e26f36",
+        "symbol": "crace",
+        "decimals": 18
+    },
+    {
+        "id": "lucky-block",
+        "address": "0x2cd96e8c3ff6b5e01169f6e3b61d28204e7810bb",
+        "symbol": "lblock",
+        "decimals": 9
+    },
+    {
+        "id": "titano",
+        "address": "0xba96731324de188ebc1ed87ca74544ddebc07d7f",
+        "symbol": "titano",
+        "decimals": 18
+    },
+    {
+        "id": "usd-coin",
+        "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+        "symbol": "usdc",
+        "decimals": 18
+    },
+    {
+        "id": "axie-infinity",
+        "address": "0xdbdc73b95cc0d5e7e99dc95523045fc8d075fb9e",
+        "symbol": "axs",
+        "decimals": 18
+    },
+    {
+        "id": "elrond-erd-2",
+        "address": "0x3a4c15f96b3b058ab3fb5faf1440cc19e7ae07ce",
+        "symbol": "egld",
+        "decimals": 18
+    },
+    {
+        "id": "tether",
+        "address": "0x55d398326f99059ff775485246999027b3197955",
+        "symbol": "usdt",
+        "decimals": 18
+    },
+    {
+        "id": "venus-busd",
+        "address": "0x95c78222b3d6e262426483d42cfa53685a67ab9d",
+        "symbol": "vbusd",
+        "decimals": 8
+    },
+    {
+        "id": "metahero",
+        "address": "0xd40bedb44c081d2935eeba6ef5a3c8a31a1bbe13",
+        "symbol": "hero",
+        "decimals": 18
+    },
+    {
+        "id": "evergrowcoin",
+        "address": "0xC001BBe2B87079294C63EcE98BdD0a88D761434e",
+        "symbol": "EGC",
+        "decimals": 9
+    },
+    {
+        "id": "elvantis",
+        "address": "0xe942c48044fb1c7f4c9eb456f6097fa4a1a17b8f",
+        "symbol": "ELV",
+        "decimals": 18
+    },
+    {
+        "id": "alien-worlds",
+        "address": "0x2222227e22102fe3322098e4cbfe18cfebd57c95",
+        "symbol": "TLM",
+        "decimals": 4
+    },
+    {
+        "id": "cherry-network",
+        "address": "0x8f36cc333f55b09bb71091409a3d7ade399e3b1c",
+        "symbol": "cher",
+        "decimals": 18
+    },
+    {
+        "id": "space-crypto",
+        "address": "0x0ecaf010fc192e2d5cbeb4dfb1fee20fbd733aa1",
+        "symbol": "spg",
+        "decimals": 18
+    },
+    {
+        "id": "baby-doge-coin",
+        "address": "0xc748673057861a797275cd8a068abb95a902e8de",
+        "symbol": "babydoge",
+        "decimals": 9
+    },
+    {
+        "id": "multi-chain-capital-2",
+        "address": "0xc146b7cdbaff065090077151d391f4c96aa09e0c",
+        "symbol": "mcc",
+        "decimals": 9
+    },
+    {
+        "id": "bomber-coin",
+        "address": "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+        "symbol": "bcoin",
+        "decimals": 18
+    },
+    {
+        "id": "launchpool",
+        "address": "0xcfb24d3c3767364391340a2e6d99c64f1cbd7a3d",
+        "symbol": "lpool",
+        "decimals": 18
+    },
+    {
+        "id": "widiland",
+        "address": "0xa361c79783833524dc7838399a4862b5f47038b8",
+        "symbol": "widi",
+        "decimals": 18
+    },
+    {
+        "id": "shiba-inu",
+        "address": "0x2859e4544c4bb03966803b044a93563bd2d0dd4d",
+        "symbol": "shib",
+        "decimals": 18
+    },
+    {
+        "id": "trustfi-network-token",
+        "address": "0x7565ab68d3f9dadff127f864103c8c706cf28235",
+        "symbol": "tfi",
+        "decimals": 18
+    },
+    {
+        "id": "titan-hunters",
+        "address": "0x0c1253a30da9580472064a91946c5ce0c58acf7f",
+        "symbol": "tita",
+        "decimals": 18
+    },
+    {
+        "id": "radio-caca",
+        "address": "0x12bb890508c125661e03b09ec06e404bc9289040",
+        "symbol": "raca",
+        "decimals": 18
+    },
+    {
+        "id": "mobox",
+        "address": "0x3203c9e46ca618c8c1ce5dc67e7e9d75f5da2377",
+        "symbol": "mobox",
+        "decimals": 18
+    },
+    {
+        "id": "infinitypad",
+        "address": "0xfe82eff54a58c21ffc9523c4998d5dad84dcbd50",
+        "symbol": "INFP",
+        "decimals": 18
+    },
+    {
+        "id": "venus-eth",
+        "address": "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8",
+        "symbol": "veth",
+        "decimals": 8
+    },
+    {
+        "id": "nervos-network",
+        "address": "0x0DFCb45EAE071B3b846E220560Bbcdd958414d78",
+        "symbol": "ckb",
+        "decimals": 18
+    },
+    {
+        "id": "lunar",
+        "address": "0x9d4451151a8de5b545a1bc6c8fdeb9d94a2868e1",
+        "symbol": "lnr",
+        "decimals": 9
+    },
+    {
+        "id": "seedify-fund",
+        "address": "0x477bc8d23c634c154061869478bce96be6045d12",
+        "symbol": "sfund",
+        "decimals": 18
+    },
+    {
+        "id": "wbnb",
+        "address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+        "symbol": "wbnb",
+        "decimals": 18
+    },
+    {
+        "id": "chain-games",
+        "address": "0x35de111558f691f77f791fb0c08b2d6b931a9d47",
+        "symbol": "chain",
+        "decimals": 18
+    },
+    {
+        "id": "binance-peg-cardano",
+        "address": "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47",
+        "symbol": "ada",
+        "decimals": 18
+    },
+    {
+        "id": "bscpad",
+        "address": "0x5a3010d4d8d3b5fb49f8b6e57fb9e48063f16700",
+        "symbol": "bscpad",
+        "decimals": 18
+    },
+    {
+        "id": "adapad",
+        "address": "0xdb0170e2d0c1cc1b2e7a90313d9b9afa4f250289",
+        "symbol": "adapad",
+        "decimals": 18
+    },
+    {
+        "id": "biswap",
+        "address": "0x965f527d9159dce6288a2219db51fc6eef120dd1",
+        "symbol": "bsw",
+        "decimals": 18
+    },
+    {
+        "id": "cake-monster",
+        "address": "0x8a5d7fcd4c90421d21d30fcc4435948ac3618b2f",
+        "symbol": "monsta",
+        "decimals": 18
+    },
+    {
+        "id": "altura",
+        "address": "0x8263cd1601fe73c066bf49cc09841f35348e3be0",
+        "symbol": "alu",
+        "decimals": 18
+    },
+    {
+        "id": "trust-wallet-token",
+        "address": "0x4b0f1812e5df2a09796481ff14017e6005508003",
+        "symbol": "twt",
+        "decimals": 18
+    },
+    {
+        "id": "micropets",
+        "address": "0xa77346760341460b42c230ca6d21d4c8e743fa9c",
+        "symbol": "pets",
+        "decimals": 18
+    },
+    {
+        "id": "binance-bitcoin",
+        "address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+        "symbol": "btcb",
+        "decimals": 18
+    },
+    {
+        "id": "cryptocars",
+        "address": "0x322e5015cc464ada7f99de7131ce494de1834396",
+        "symbol": "ccar",
+        "decimals": 18
+    },
+    {
+        "id": "pancakeswap-token",
+        "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+        "symbol": "cake",
+        "decimals": 18
+    },
+    {
+        "id": "drip-network",
+        "address": "0x20f663cea80face82acdfa3aae6862d246ce0333",
+        "symbol": "DRIP",
+        "decimals": 18
+    },
+    {
+        "id": "ripple",
+        "address": "0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe",
+        "symbol": "xrp",
+        "decimals": 18
+    },
+    {
+        "id": "pulsepad",
+        "address": "0x8a74bc8c372bc7f0e9ca3f6ac0df51be15aec47a",
+        "symbol": "plspad",
+        "decimals": 18
+    },
+    {
+        "id": "everdome",
+        "address": "0x475bfaa1848591ae0e6ab69600f48d828f61a80e",
+        "symbol": "everdome",
+        "decimals": 18
+    },
+    {
+        "id": "good-games-guild",
+        "address": "0xd8047afecb86e44eff3add991b9f063ed4ca716b",
+        "symbol": "ggg",
+        "decimals": 18
+    },
+    {
+        "id": "block-monsters",
+        "address": "0x287db351d5230716246cfb46af8153025eda6a0a",
+        "symbol": "mnstrs",
+        "decimals": 18
+    },
+    {
+        "id": "space-sip",
+        "address": "0x9e5965d28e8d44cae8f9b809396e0931f9df71ca",
+        "symbol": "sip",
+        "decimals": 18
+    },
+    {
+        "id": "tenset",
+        "address": "0x1f64fdad335ed784898effb5ce22d54d8f432523",
+        "symbol": "10set",
+        "decimals": 18
+    },
+    {
+        "id": "heroes-td",
+        "address": "0x5e2689412fae5c29bd575fbe1d5c1cd1e0622a8f",
+        "symbol": "htd",
+        "decimals": 18
+    },
+    {
+        "id": "ethereum",
+        "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+        "symbol": "eth",
+        "decimals": 18
+    },
+    {
+        "id": "gala",
+        "address": "0x7ddee176f665cd201f93eede625770e2fd911990",
+        "symbol": "gala",
+        "decimals": 18
+    },
+    {
+        "id": "metavpad",
+        "address": "0x62858686119135cc00c4a3102b436a0eb314d402",
+        "symbol": "metav",
+        "decimals": 18
+    },
+    {
+        "id": "everrise",
+        "address": "0x0cd022dde27169b20895e0e2b2b8a33b25e63579",
+        "symbol": "rise",
+        "decimals": 18
+    },
+    {
+        "id": "matic-network",
+        "address": "0xcc42724c6683b7e57334c4e856f4c9965ed682bd",
+        "symbol": "matic",
+        "decimals": 18
+    },
+    {
+        "id": "anyswap",
+        "address": "0xf68c9df95a18b2a5a5fa1124d79eeeffbad0b6fa",
+        "symbol": "any",
+        "decimals": 18
+    },
+    {
+        "id": "qmall",
+        "address": "0x07e551e31a793e20dc18494ff6b03095a8f8ee36",
+        "symbol": "QMALL",
+        "decimals": 18
+    },
+    {
+        "id": "idia",
+        "address": "0x0b15ddf19d47e6a86a56148fb4afffc6929bcb89",
+        "symbol": "idia",
+        "decimals": 18
+    },
+    {
+        "id": "luna-rush",
+        "address": "0xde301d6a2569aefcfe271b9d98f318baee1d30a4",
+        "symbol": "lus",
+        "decimals": 18
+    },
+    {
+        "id": "derace",
+        "address": "0x373e768f79c820aa441540d254dca6d045c6d25b",
+        "symbol": "derc",
+        "decimals": 18
+    }
+    
+]
