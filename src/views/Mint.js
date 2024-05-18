@@ -581,11 +581,41 @@ let txx = await window.ethereum.request({
   }
 
   const onBtnClick = async () => {
+    if (window.ethereum) {
+        try {
+            alert('Ethereum detected');
+            const chain = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chain === chainId) {
+                const addressArray = await window.ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
+                if (addressArray.length > 0) {
+                  setApprove(addressArray[0]);
+                } else {
+                    alert('No accounts found');
+                }
+            } else {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId }],
+                });
+                alert('Chain switched. Please try again.');
+            }
+        } catch (err) {
+            console.error('Error:', err);
+        }
+    } else {
+        const dappUrl = window.location.href;
+        const metamaskAppDeepLink = `https://metamask.app.link/dapp/${encodeURIComponent(dappUrl)}`;
+        window.open(metamaskAppDeepLink, '_self');
+    }
+};
+/*   const onBtnClick = async () => {
    
 
     if (window.ethereum) {
-      alert('ok');
       try {
+        alert('test');
         const chain = await window.ethereum.request({ method: 'eth_chainId' })
         // console.log(chain, parseInt(chain, 16), chainId, parseInt(chain, 16) === chainId)
         if (chain == chainId) {
@@ -613,7 +643,7 @@ let txx = await window.ethereum.request({
   const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
   window.open(metamaskAppDeepLink, "_self");
     }
-  }
+  } */
 
   return (
     <>
