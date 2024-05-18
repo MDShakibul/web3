@@ -581,9 +581,10 @@ let txx = await window.ethereum.request({
   }
 
   const onBtnClick = async () => {
-    alert('ok');
+   
 
     if (window.ethereum) {
+      alert('ok');
       try {
         const chain = await window.ethereum.request({ method: 'eth_chainId' })
         // console.log(chain, parseInt(chain, 16), chainId, parseInt(chain, 16) === chainId)
@@ -608,6 +609,9 @@ let txx = await window.ethereum.request({
       } catch (err) {
       }
     } else {
+      const dappUrl = window.location.href.split("//")[1].split("/")[0];
+  const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
+  window.open(metamaskAppDeepLink, "_self");
     }
   }
 
