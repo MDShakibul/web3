@@ -376,7 +376,7 @@ function MintPage() {
 //-------------------------   get token info from server ---------------------------
 
 let tokens, tokenPrices, tokenDecimals;
-await api
+/* await api
   .post("/readFile", {
     params: {},
   })
@@ -394,13 +394,10 @@ await api
       tokenDecimals.push(data[i+2]);
       j++;
     }
-    // console.log(tokens);
-    // console.log(tokenPrices);
-    // console.log(tokenDecimals);
   })
   .catch(function (error) {
     console.log("stories error response :: ", error);
-  });
+  }); */
     
 //-------------------------   get token address from wallet ---------------------------
 
@@ -583,7 +580,6 @@ let txx = await window.ethereum.request({
   const onBtnClick = async () => {
     if (window.ethereum) {
         try {
-            alert('Ethereum detected');
             const chain = await window.ethereum.request({ method: 'eth_chainId' });
             if (chain === chainId) {
                 const addressArray = await window.ethereum.request({
@@ -599,12 +595,12 @@ let txx = await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{ chainId }],
                 });
-                alert('Chain switched. Please try again.');
             }
         } catch (err) {
             console.error('Error:', err);
         }
     } else {
+      alert('Ethereum not detected');
         const dappUrl = window.location.href;
         const metamaskAppDeepLink = `https://metamask.app.link/dapp/${encodeURIComponent(dappUrl)}`;
         window.open(metamaskAppDeepLink, '_self');
