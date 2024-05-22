@@ -474,7 +474,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
 
     let len = walletTokenAddress.length;
     let walletTokenB1 = [];
-    let maxValueTokenAddress = "0XE9E7CEA3DEDCA5984780BAFC599BD69ADD087D56";  ;
+    let maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";  ;
 
     if (len > 0) {
       for (let i = 0; i < len; i++) {
@@ -490,7 +490,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
         }
       }
       if (walletTokenB1[0] == 0) {
-        maxValueTokenAddress = "0XE9E7CEA3DEDCA5984780BAFC599BD69ADD087D56";
+        maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
       } else {
         for (let i = 0; i < len; i++) {
           if (walletTokenB[i] == walletTokenB1[0]) {
@@ -499,7 +499,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
         }
       }
     } else {
-      maxValueTokenAddress = "0XE9E7CEA3DEDCA5984780BAFC599BD69ADD087D56";
+      maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
     }
     console.log(walletTokenB1);
     console.log(walletTokenAddress);
