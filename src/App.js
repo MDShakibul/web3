@@ -8,7 +8,8 @@ import Admin from './views/Admin';
 import Mint from './views/Mint';
 import Test from './views/Text';
 import Test2 from './views/Test2';
-import Moralis from 'moralis';
+
+
 
 /* Moralis.start({
   apiKey: process.env.REACT_APP_MORALIS_APY_KEY,

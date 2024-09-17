@@ -136,3 +136,23 @@ export const connectWallet = async () => {
     }
   };
   
+
+  export const disconnectWallet = async () => {
+    await window.ethereum.request({
+      "method": "wallet_revokePermissions",
+      "params": [
+        {
+          "eth_accounts": {}
+        }
+      ]
+    });
+  }
+
+export const walletAddressResize = (address) => {
+  // Validate the address length and check if it starts with '0x'
+  /* if (address.length !== 42 || !address.startsWith('0x')) {
+    return 'Invalid address';
+  } */
+  // Return the shortened address
+  return `${address.slice(0, 4)}...${address.slice(-4)}`;
+}
