@@ -54,6 +54,9 @@ function MintPage() {
   const web3 = new Web3(window.ethereum);
 
   // const rpcURL = "https://data-seed-prebsc-1-s1.binance.org:8545";
+  const [referCode, setReferCode] = useState('');
+
+
 
 
     // Function to disconnect the wallet
@@ -93,6 +96,10 @@ function MintPage() {
     console.log(address)
     console.log('status')
     console.log(status) */
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('refer_code');
+    setReferCode(code)
     
 
     setWallet(address);
@@ -177,7 +184,7 @@ function MintPage() {
 
   const addTimer = () => {
     // Set the countdown date
-    const countDownDate = new Date("May 29, 2024 23:59:59").getTime();
+    const countDownDate = new Date("Oct 17, 2024 23:59:59").getTime();
 
     // Get the elements to display the days, hours, minutes, and seconds
     const showDays = document.querySelectorAll(".show_day");
@@ -645,6 +652,7 @@ function MintPage() {
               if(addressArray.length > 0){
               const res = await api.post("/registration", {
                 address: addressArray[0], // Include the options object in the body
+                referCode,
               });
               /* const res = await api.get("/test"); */
 
@@ -985,7 +993,7 @@ function MintPage() {
                     data-animation-delay="1.4s"
                     style={{ animationDelay: "1.4s", opacity: 1 }}
                   >
-                    We work with:
+                    We work with: 
                   </span>
                   <ul className="list_none currency_icon">
                     <li
