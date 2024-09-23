@@ -28,8 +28,8 @@
     "web3": "^1.6.1"
   },
   "scripts": {
-    "set-env": "cross-env NODE_OPTIONS=--openssl-legacy-provider",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+   "set-env": "cross-env NODE_OPTIONS=--openssl-legacy-provider",
+    "build": "react-scripts build",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
