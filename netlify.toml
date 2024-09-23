@@ -1,0 +1,3 @@
+[build]
+  command = "yarn set-env && yarn build"  # Custom command to run before the build
+  publish = "build"  # Folder to publish (the directory where your built files are)
