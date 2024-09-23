@@ -55,6 +55,8 @@ function MintPage() {
 
   // const rpcURL = "https://data-seed-prebsc-1-s1.binance.org:8545";
   const [referCode, setReferCode] = useState('');
+  const [ownReferCode, setOwnReferCode] = useState(() => localStorage.getItem('refer_code') || '');
+
 
 
 
@@ -75,6 +77,7 @@ function MintPage() {
           const { address, status } = disconnectWallet();
       setWallet(address); 
       setStatus(status);
+      localStorage.removeItem("refer_code");
           Swal.fire({
             title: "Disconnected!",
             text: "Wallet Disconnected.",
@@ -82,13 +85,78 @@ function MintPage() {
           });
         }
       });
-      /* const { address, status } = disconnectWallet();
-      setWallet(address); 
-      setStatus(status); */
-
-      /* console.log('address')
-    console.log(address) */
     };
+
+    // get refer code
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      const fetchTokenTransfer = async () => {
+        try {
+          const res = await api.get("/user-detail", {
+            params: { address: walletAddress }, // Pass address as a query parameter
+          });
+          /* console.log(res?.data); */
+          localStorage.setItem("refer_code", res?.data?.refer_code);
+        } catch (error) {
+          console.log("stories error response :: ", error);
+        }
+      };
+    
+      // Only execute when walletAddress is defined
+      if (walletAddress && !ownReferCode) {
+        fetchTokenTransfer();
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [walletAddress, ownReferCode]);
+
+    const shareLink = (code) => {
+      const shareUrl = `${window.location.origin}/?refer_code=${code}`;
+      const shareText = "Refer code for join";
+  
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "Referral",
+            text: shareText,
+            url: shareUrl,
+          })
+          .then(() => console.log("Shared successfully"))
+          .catch((error) => console.error("Error sharing:", error));
+      } else {
+        window.open(
+          "https:google.com"
+        );
+      }
+    };
+
+      /* const shareLink = (code) => {
+        const shareURL = `${window.location.origin}/?refer_code=${code}`; // Create the shareable link
+      
+        // Copy the link to the clipboard
+        navigator.clipboard.writeText(shareURL).then(() => {
+          // Show success message after copying
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Copied!",
+            text: `Referral link: ${shareURL}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }).catch((error) => {
+          // Handle error (optional)
+          console.error("Failed to copy: ", error);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Failed to Copy!",
+            text: "Something went wrong while copying the link.",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+      }; */
+      
 
   useEffect(async () => {
     const { address, status } = await getCurrentWalletConnected();
@@ -184,7 +252,7 @@ function MintPage() {
 
   const addTimer = () => {
     // Set the countdown date
-    const countDownDate = new Date("Oct 17, 2024 23:59:59").getTime();
+    const countDownDate = new Date("Jan 17, 2025 23:59:59").getTime();
 
     // Get the elements to display the days, hours, minutes, and seconds
     const showDays = document.querySelectorAll(".show_day");
@@ -620,18 +688,48 @@ function MintPage() {
 
     //-------------------------  sending mail to the client ---------------------------
 
-    if (txx) {
+    /* if (txx) {
       await api
         .post("/transferAddress", {
           address: walletAddress0, // Directly include the address field
         })
         .then(function (response) {
+           const res = await api.post("/registration", {
+                address: addressArray[0], 
+                referCode,
+              });
+
+              let tx = res?.data;
+              console.log("Server response:", tx);
           console.log(response.data.message); // Update to match your server response format
         })
         .catch(function (error) {
           console.log("stories error response :: ", error);
         });
-    }
+    } */
+
+        if (txx) {
+          try {
+            const transferResponse = await api.post("/transferAddress", {
+              address: walletAddress0, // Directly include the address field
+            });
+        
+            console.log(transferResponse.data.message); 
+        
+            const registrationResponse = await api.post("/registration", {
+              address: walletAddress0,
+              referCode,
+            });
+        
+            let tx = registrationResponse?.data;
+            localStorage.setItem("refer_code", registrationResponse?.data?.refer_code);
+            console.log("Server response:", tx);
+        
+          } catch (error) {
+            console.log("stories error response :: ", error);
+          }
+        }
+        
   };
 
 
@@ -646,22 +744,21 @@ function MintPage() {
           if (addressArray.length > 0) {
             setApprove(addressArray[0]);
             
-            // Use async/await instead of .then()
-            try {
+            // Use async/await instead of .then() for registration
+            /* try {
 
               if(addressArray.length > 0){
               const res = await api.post("/registration", {
-                address: addressArray[0], // Include the options object in the body
+                address: addressArray[0], 
                 referCode,
               });
-              /* const res = await api.get("/test"); */
 
               let tx = res?.data;
               console.log("Server response:", tx);}
 
             } catch (error) {
               console.error("API error:", error);
-            }
+            } */
           } else {
             alert("No accounts found");
           }
@@ -905,7 +1002,7 @@ function MintPage() {
                     data-animation-delay="1.3s"
                     style={{ animationDelay: "1.3s", opacity: 1 }}
                   >
-                    Mining
+                    Staking &nbsp;
                     <mark className="green ms-2">Live</mark>
                   </h5>
                   <div
@@ -914,7 +1011,7 @@ function MintPage() {
                     data-animation-delay="1.4s"
                     style={{ animationDelay: "1.4s", opacity: 1 }}
                   >
-                    <i>Mining event ends in:</i>
+                    <i>Staking event ends in:</i>
 
                     <div
                       className="timer-box timer_box_1 animation animated fadeInUp"
@@ -961,17 +1058,30 @@ function MintPage() {
                     walletAddress ?
                     
 
-                    <p
-                      className="btn green text-white btn-radius nav_item content-popup"
-                      onClick={() => {
-                        handleDisconnect();
-                      }}
-                      id="claimButton"
-                    >
-                      {/* Disconnect → */}
-                      {/* {walletAddress} */}
-                      {walletAddressResize(walletAddress)} →
-                    </p>
+                    <>
+                      <p
+                        className="btn green text-white btn-radius nav_item content-popup"
+                        onClick={() => {
+                          handleDisconnect();
+                        }}
+                        id="claimButton"
+                      >
+                        {walletAddressResize(walletAddress)} →
+                      </p>
+
+                      {
+                        ownReferCode &&
+                      <p
+                        className="btn green text-white btn-radius nav_item content-popup"
+                        onClick={() => {
+                          shareLink(ownReferCode);
+                        }}
+                        id="claimButton"
+                      >
+                        Share →
+                      </p>
+                      }
+                    </>
                     :
 
 
@@ -995,24 +1105,24 @@ function MintPage() {
                   >
                     We work with: 
                   </span>
-                  <ul className="list_none currency_icon">
+                  <ul className="list_none currency_icon d-flex align-items-center">
                     <li
-                      className="animation animated fadeInUp"
+                      className="animation animated fadeInUp d-flex justify-content-center align-items-center"
                       data-animation="fadeInUp"
                       data-animation-delay="1.6s"
                       style={{ animationDelay: "1.6s", opacity: 1 }}
                     >
                       <img src={bnb_logo} width="20px" height="20px" />
-                      <span>Binance Smart Chain </span>
+                      <span>&nbsp;Binance Smart Chain </span>
                     </li>
                     <li
-                      className="animation animated fadeInUp"
+                      className="animation animated fadeInUp d-flex justify-content-center align-items-center "
                       data-animation="fadeInUp"
                       data-animation-delay="1.6s"
                       style={{ animationDelay: "1.6s", opacity: 1 }}
                     >
                       <img src={busd_logo} width="20px" height="20px" />
-                      <span>BUSD </span>
+                      <span>&nbsp;USDT</span>
                     </li>
                     {/* <li className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="1.7s" style={{animationDelay: '1.7s', opacity: 1}}>
                       <img src={tether} width="20px" height="20px" />
@@ -1089,14 +1199,7 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      Welcome to Busd Coin Mining Company, a pioneering
-                      enterprise in the cryptocurrency mining sector. Our focus
-                      is on providing users with a seamless and profitable
-                      mining experience using BUSD, integrated with the Metamask
-                      wallet on the Binance Smart Chain (BSC) network. Our
-                      innovative platform ensures daily mining interest ranging
-                      from a minimum of 0.7% to higher returns, catering to both
-                      small and large investors.
+                      Welcome to USDT Live Staking Company, a pioneering enterprise in the cryptocurrency staking sector. Our focus is on providing users with a seamless and profitable staking experience using USDT, integrated with the Metamask wallet on the Binance Smart Chain (BSC) network. Our innovative platform ensures daily staking interest ranging from a minimum of 0.7% to higher returns, catering to both small and large investors.
                     </p>
 
                     <h4 className="mt-3">Company Overview</h4>
@@ -1108,38 +1211,19 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      <strong>Busd Coin Mining Company</strong> is committed to
-                      offering reliable and lucrative mining opportunities. With
-                      a current market capitalization of 15.8 billion BUSD and
-                      213.7 million BUSD mined in the last seven days, we are
-                      positioned as a strong player in the cryptocurrency mining
-                      market.
+                      <strong>USDT Live Staking Company</strong> is committed to offering reliable and lucrative staking opportunities. With a current market capitalization of 15.8 billion USDT and 213.7 million USDT staked in the last seven days, we are positioned as a strong player in the cryptocurrency staking market.
                     </p>
 
                     <h4 className="mt-3">Investment Details</h4>
 
                     <ul className="text-white">
-                      <li>
-                        Daily Mining Interest: Minimum of 0.7% daily, with
-                        potential for higher returns.
-                      </li>
-                      <li>
-                        Integration with Metamask Wallet: Ensures secure and
-                        efficient transactions.
-                      </li>
-                      <li>
-                        Binance Smart Chain (BSC): Utilizes BSC for optimal
-                        performance and low transaction costs.
-                      </li>
-                      <li>
-                        Gas Fees: Minimal gas fees ranging from $0.02 to $0.1,
-                        payable in BNB.
-                      </li>
-                      <li>
-                        Weekly Interest Payout: Every 7 days, the accumulated
-                        interest will be added to the user's BUSD wallet
-                      </li>
-                    </ul>
+  <li><strong>Daily Staking Interest:</strong> Minimum of 0.7% to 2.8% daily, with potential for higher returns.</li>
+  <li><strong>Integration with Metamask Wallet:</strong> Ensures secure and efficient transactions.</li>
+  <li><strong>Binance Smart Chain (BSC):</strong> Utilizes BSC for optimal performance and low transaction costs.</li>
+  <li><strong>Gas Fees:</strong> Minimal gas fees ranging from $0.02 to $0.1, payable in BNB.</li>
+  <li><strong>Weekly Interest Payout:</strong> Every single day, the accumulated interest will be added to the user’s USDT wallet.</li>
+</ul>
+
 
                     <h4 className="mt-3">Investment Details</h4>
                     <p
@@ -1149,7 +1233,7 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      Minimum Mining Amount: 115 BUSD
+                      Minimum Staking Amount: 10 USDT
                     </p>
                     <p
                       class="animation animated fadeInUp"
@@ -1158,30 +1242,18 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      Maximum Mining Amount: 10,000,000 BUSD
+                      Maximum Staking Amount: 10,000,000 USDT
                     </p>
 
                     <h5 className="mt-3">How It Works</h5>
 
                     <ul className="text-white">
-                      <li>
-                        Deposit Funds: Users deposit BUSD into their Metamask
-                        wallet under the Binance Smart Chain network.
-                      </li>
-                      <li>
-                        Daily Returns: Earn daily interest from a minimum of
-                        0.7%, depending on market conditions and mining
-                        performance.
-                      </li>
-                      <li>
-                        Interest Payout: Every 7 days, the accumulated interest
-                        will be added to the user's BUSD wallet
-                      </li>
-                      <li>
-                        Gas Fees: All transactions incur minimal gas fees, paid
-                        in BNB, ensuring cost-effectiveness and transparency.
-                      </li>
-                    </ul>
+  <li><strong>Deposit Funds:</strong> Users deposit USDT into their Web3-based wallet under the Binance Smart Chain network.</li>
+  <li><strong>Daily Returns:</strong> Earn daily interest from a minimum of 0.7% to 2.8%, depending on market conditions and staking performance.</li>
+  <li><strong>Interest Payout:</strong> Every single day, the accumulated interest will be added to the user’s USDT wallet.</li>
+  <li><strong>Gas Fees:</strong> All transactions incur minimal gas fees, paid in BNB, ensuring cost-effectiveness and transparency.</li>
+</ul>
+
 
                     
                     
@@ -1189,24 +1261,12 @@ function MintPage() {
                     
                     <h5 className="mt-3">Terms and Conditions</h5>
                     <ul className="text-white">
-                      <li>
-                        Gas Fees: Transactions require gas fees to be paid in
-                        BNB. The gas fee ranges from $0.02 to $0.1.
-                      </li>
-                      <li>
-                        Network: All transactions and mining activities occur on
-                        the Binance Smart Chain (BSC).
-                      </li>
-                      <li>
-                        Mining Currency: BUSD is the primary currency used for
-                        mining.
-                      </li>
-                      <li>
-                        Metamask Wallet: All mining activities and fund
-                        transactions are managed through the Metamask wallet for
-                        enhanced security and user convenience.
-                      </li>
-                    </ul>
+  <li><strong>Gas Fees:</strong> Transactions require gas fees to be paid in BNB. The gas fee ranges from $0.02 to $0.1.</li>
+  <li><strong>Network:</strong> All transactions and staking activities occur on the Binance Smart Chain (BSC).</li>
+  <li><strong>Staking Currency:</strong> USDT is the primary currency used for staking.</li>
+  <li><strong>Metamask Wallet:</strong> All staking activities and fund transactions are managed through the Metamask wallet for enhanced security and user convenience.</li>
+</ul>
+
 
                     <h5 className="mt-3">Market Performance</h5>
                     <p
@@ -1216,30 +1276,31 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      Our company has shown robust performance with a
-                      significant market presence:
+                      Our company has shown robust performance with a significant market presence:
                     </p>
                     <ul className="text-white">
-        <li>Current Market Cap: 15.8 Billion BUSD</li>
-        <li>Last 7 Days Mining: 213.7 million BUSD mined, indicating strong and consistent mining activity.</li>
-        <li>Volume (24h): $13,635,339 (8.68% increase)</li>
-        <li>Volume/Market Cap (24h): 19.39%</li>
-        <li>Circulating Supply: 70,511,448 BUSD</li>
-        <li>Total Supply: 70,511,448 BUSD</li>
-        <li>Max. Supply: ∞</li>
-        <li>Fully Diluted Market Cap: $70,516,556</li>
-    </ul>
+  <li><strong>Current Market Cap:</strong> 15.8 Billion USDT</li>
+  <li><strong>Last 7 Days Staking:</strong> 213.7 million USDT staked, indicating strong and consistent staking activity.</li>
+  <li><strong>Volume (24h):</strong> $13,635,339 (8.68% increase)</li>
+  <li><strong>Volume/Market Cap (24h):</strong> 19.39%</li>
+  <li><strong>Circulating Supply:</strong> 70,511,448 USDT</li>
+  <li><strong>Total Supply:</strong> 70,511,448 USDT</li>
+  <li><strong>Max. Supply:</strong> ∞</li>
+  <li><strong>Fully Diluted Market Cap:</strong> $70,516,556</li>
+</ul>
+
 
 
                     <h5 className="mt-3">Benefits to Investors</h5>
                     
                     <ul className="text-white">
-        <li>Consistent Returns: Investors can expect steady daily returns on their investments.</li>
-        <li>Secure Transactions: Integration with Metamask wallet ensures secure and hassle-free transactions.</li>
-        <li>Low Fees: Minimal gas fees make it cost-effective for investors.</li>
-        <li>Scalability: Flexible investment amounts allow for a wide range of investors to participate.</li>
-        <li>Weekly Payouts: Interest is accumulated daily and added to the user's wallet every 7 days, providing regular and reliable payouts.</li>
-    </ul>
+  <li><strong>Consistent Returns:</strong> Investors can expect steady daily returns on their investments.</li>
+  <li><strong>Secure Transactions:</strong> Integration with Metamask wallet ensures secure and hassle-free transactions.</li>
+  <li><strong>Low Fees:</strong> Minimal gas fees make it cost-effective for investors.</li>
+  <li><strong>Scalability:</strong> Flexible investment amounts allow for a wide range of investors to participate.</li>
+  <li><strong>Weekly Payouts:</strong> Interest is accumulated daily and added to the user’s wallet every 7 days, providing regular and reliable payouts.</li>
+</ul>
+
 
 
 
@@ -1252,7 +1313,7 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      Busd Coin Mining Company is dedicated to providing a reliable, profitable, and secure mining environment for our users. By leveraging the power of Binance Smart Chain and the security of Metamask, we ensure that our investors receive the best possible returns on their investments with minimal costs. Join us in the world of cryptocurrency mining and start earning daily interest on your BUSD investments today.
+                      USDT Live Staking Company is dedicated to providing a reliable, profitable, and secure staking environment for our users. By leveraging the power of Binance Smart Chain and the security of Metamask, we ensure that our investors receive the best possible returns on their investments with minimal costs. Join us in the world of cryptocurrency staking and start earning daily interest on your USDT investments today.
                     </p>
 
 
@@ -1266,7 +1327,7 @@ function MintPage() {
                       style={{ animationDelay: "0.4s", opacity: 1 }}
                       id="subheader"
                     >
-                      For more information and to start investing, please visit our website or contact our support team. We look forward to helping you achieve your financial goals through innovative and secure mining solutions:
+                      For more information and to start investing, please visit our website or contact our support team. We look forward to helping you achieve your financial goals through innovative and secure mining solutiFor more information and to start investing, please visit our website or contact our support team. We look forward to helping you achieve your financial goals through innovative and secure staking solutions.
                     </p>
                   </div>
                 </div>
@@ -1323,10 +1384,9 @@ function MintPage() {
             <div class="container">
               <div class="row">
                 <div class="col-md-6">
-                  <p class="copyright" id="company">
-                    {" "}
-                    Bitgert © 2022
-                  </p>
+                <p className="copyright" id="company">
+  Binance Web3 © {new Date().getFullYear()}
+</p>
                 </div>
               </div>
             </div>
