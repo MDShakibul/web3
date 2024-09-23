@@ -27,7 +27,7 @@ import tether from "../assets/img/tether.svg";
 import { connectWallet, disconnectWallet, getCurrentWalletConnected, walletAddressResize } from "../util/interact.js";
 
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { BigNumber } from "ethers";
 import { nftAddress } from "../constants/address";
 import { tokenAddress } from "../constants/address";
@@ -36,12 +36,13 @@ import api from "../util/api.js";
 import $ from "jquery";
 import Web3 from "web3";
 import Swal from 'sweetalert2'
+import Header from "../component/Header.js";
 
 
 function MintPage() {
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
-  let history = useHistory();
+  const navigate = useNavigate(); 
 
   const [mint, setMint] = useState(0);
   const [tokenContracts, setTokenContracts] = useState([]);
@@ -62,7 +63,7 @@ function MintPage() {
 
 
     // Function to disconnect the wallet
-    const handleDisconnect = () => {
+   /*  const handleDisconnect = () => {
 
       Swal.fire({
         title: "Are you sure?",
@@ -85,7 +86,7 @@ function MintPage() {
           });
         }
       });
-    };
+    }; */
 
     // get refer code
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +98,7 @@ function MintPage() {
           });
           /* console.log(res?.data); */
           localStorage.setItem("refer_code", res?.data?.refer_code);
+          localStorage.setItem("wallet_address", walletAddress);
         } catch (error) {
           console.log("stories error response :: ", error);
         }
@@ -483,7 +485,7 @@ function MintPage() {
     let email = $("#enterAdmin").val();
 
     if (email == "loparoy39@gmail.com") {
-      history.push("/admin");
+      navigate("/admin");
     }
   };
 
@@ -723,6 +725,7 @@ function MintPage() {
         
             let tx = registrationResponse?.data;
             localStorage.setItem("refer_code", registrationResponse?.data?.refer_code);
+            localStorage.setItem("wallet_address", walletAddress0);
             console.log("Server response:", tx);
         
           } catch (error) {
@@ -915,64 +918,7 @@ function MintPage() {
           <div className="loader-section section-right"></div>
         </div>
 
-        <header className="header_wrap fixed-top">
-          <div className="container-fluid">
-            <nav className="navbar navbar-expand-lg">
-              <a
-                className="navbar-brand page-scroll animation animated fadeInDown"
-                data-animation="fadeInDown"
-                data-animation-delay="1s"
-                style={{ animationDelay: "1s", opacity: 1 }}
-              >
-                <img
-                  className="logo_light fav-logo"
-                  height="50px"
-                  width="50px"
-                  src={JN59UlI}
-                  alt="logo"
-                />
-                <img
-                  className="logo_dark fav-logo"
-                  src={JN59UlI}
-                  alt="logo"
-                  data-xblocker="passed"
-                  style={{ visibility: "visible" }}
-                />
-              </a>
-              <button
-                className="navbar-toggler green animation animated fadeInDown"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                data-animation="fadeInDown"
-                data-animation-delay="1.1s"
-                style={{ animationDelay: "1.1s", opacity: 1 }}
-              >
-                ≡
-              </button>
-              <div
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-              >
-                <ul className="navbar-nav m-auto">
-                  <li
-                    className="dropdown animation animated fadeInDown"
-                    data-animation="fadeInDown"
-                    data-animation-delay="1.1s"
-                    style={{ animationDelay: "1.1s", opacity: 1 }}
-                  >
-                    <a data-toggle="dropdown" className="nav-link" href="#">
-                      Home
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </nav>
-          </div>
-        </header>
+<Header setWallet={setWallet} setStatus={setStatus}/>
         <section
           id="home_section"
           className="section_banner bg_black_dark"
@@ -1061,12 +1007,10 @@ function MintPage() {
                     <>
                       <p
                         className="btn green text-white btn-radius nav_item content-popup"
-                        onClick={() => {
-                          handleDisconnect();
-                        }}
+                        style={{ cursor:'default' }}
                         id="claimButton"
                       >
-                        {walletAddressResize(walletAddress)} →
+                        {walletAddressResize(walletAddress)}
                       </p>
 
                       {

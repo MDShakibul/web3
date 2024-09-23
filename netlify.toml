@@ -1,4 +1,0 @@
-[build]
-  command = "yarn set-env && yarn build"
-  publish = "build"
-

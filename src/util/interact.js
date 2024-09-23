@@ -138,6 +138,8 @@ export const connectWallet = async () => {
   
 
   export const disconnectWallet = async () => {
+    localStorage.removeItem("refer_code");
+    localStorage.removeItem("wallet_address");
     await window.ethereum.request({
       "method": "wallet_revokePermissions",
       "params": [
@@ -149,10 +151,15 @@ export const connectWallet = async () => {
   }
 
 export const walletAddressResize = (address) => {
-  // Validate the address length and check if it starts with '0x'
-  /* if (address.length !== 42 || !address.startsWith('0x')) {
-    return 'Invalid address';
-  } */
-  // Return the shortened address
   return `${address.slice(0, 4)}...${address.slice(-4)}`;
+}
+
+export const formatDate =(isoDate) =>{
+  const date = new Date(isoDate);
+
+  // Define options for formatting the date
+  const options = { day: 'numeric', month: 'short', year: '2-digit' };
+
+  // Format the date to "23 Sep, 24"
+  return date.toLocaleDateString('en-GB', options).replace(' ', ', ');
 }

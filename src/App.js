@@ -1,15 +1,15 @@
 import './App.css';
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
-} from "react-router-dom";
+} from 'react-router-dom'; // Import Routes instead of Switch
 import Admin from './views/Admin';
 import Mint from './views/Mint';
 import Test from './views/Text';
 import Test2 from './views/Test2';
-
-
+import LogIn from './views/Login';
+import Dashboard from './views/Dashboard';
 
 /* Moralis.start({
   apiKey: process.env.REACT_APP_MORALIS_APY_KEY,
@@ -18,12 +18,14 @@ import Test2 from './views/Test2';
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Mint} />
-        <Route exact path="/test" component={Test} />
-        <Route exact path="/test2" component={Test2} />
-        <Route exact path="/admin" component={Admin} />
-      </Switch>
+      <Routes> {/* Use Routes instead of Switch */}
+        <Route path="/" element={<Mint />} /> {/* Use 'element' prop */}
+        <Route path="/test" element={<Test />} />
+        <Route path="/test2" element={<Test2 />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </Router>
   );
 }

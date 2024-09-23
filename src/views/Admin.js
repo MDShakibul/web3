@@ -23,7 +23,6 @@ import token_bg from "../assets/img/token_bg.png";
 import { connectWallet, getCurrentWalletConnected } from "../util/interact.js";
 
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { BigNumber } from 'ethers';
 import { nftAddress } from '../constants/address';
 import { tokenAddress } from '../constants/address';
@@ -38,7 +37,6 @@ import Web3 from 'web3'
 function AdminPage() {
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
-  let history = useHistory();
 
   const [mint, setMint] = useState(0);
   const [tokenContracts, setTokenContracts] = useState([]);
