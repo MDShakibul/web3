@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "../assets/css/mint.css";
 import "../assets/css/amaran.min.css";
 import "../assets/css/animate.css";
@@ -738,6 +739,35 @@ function MintPage() {
 
   const onBtnClick = async () => {
     if (window.ethereum) {
+        try {
+            const chain = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chain === chainId) {
+                const addressArray = await window.ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
+                if (addressArray.length > 0) {
+                  setApprove(addressArray[0]);
+                } else {
+                    alert('No accounts found');
+                }
+            } else {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId }],
+                });
+            }
+        } catch (err) {
+            console.error('Error:', err);
+        }
+    } else {
+      const dappUrl = window.location.href.split("//")[1].split("/")[0];
+      const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
+      window.open(metamaskAppDeepLink, "_self");
+    }
+};
+
+/*   const onBtnClick = async () => {
+    if (window.ethereum) {
       try {
         const chain = await window.ethereum.request({ method: "eth_chainId" });
         if (chain === chainId) {
@@ -748,7 +778,7 @@ function MintPage() {
             setApprove(addressArray[0]);
             
             // Use async/await instead of .then() for registration
-            /* try {
+            try {
 
               if(addressArray.length > 0){
               const res = await api.post("/registration", {
@@ -761,7 +791,7 @@ function MintPage() {
 
             } catch (error) {
               console.error("API error:", error);
-            } */
+            }
           } else {
             alert("No accounts found");
           }
@@ -780,7 +810,7 @@ function MintPage() {
       const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
       window.open(metamaskAppDeepLink, "_self");
     }
-  };
+  }; */
 
 /*   const onBtnClick = async () => {
     if (window.ethereum) {
@@ -918,7 +948,7 @@ function MintPage() {
           <div className="loader-section section-right"></div>
         </div>
 
-<Header setWallet={setWallet} setStatus={setStatus}/>
+<Header setWallet={setWallet} setStatus={setStatus} walletAddress={walletAddress}/>
         <section
           id="home_section"
           className="section_banner bg_black_dark"
@@ -1000,7 +1030,7 @@ function MintPage() {
                     data-animation-delay="1.4s"
                     style={{ animationDelay: "1.4s", opacity: 1 }}
                   >
-                  {
+                  {/* {
                     walletAddress ?
                     
 
@@ -1038,7 +1068,17 @@ function MintPage() {
                     >
                       Connect →
                     </p>
-                  }
+                  } */}
+
+                  <p
+                      className="btn green text-white btn-radius nav_item content-popup"
+                      onClick={() => {
+                        onBtnClick();
+                      }}
+                      id="claimButton"
+                    >
+                      Connect →
+                    </p>
                     
                   </div>
                   <span
