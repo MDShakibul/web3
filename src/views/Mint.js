@@ -711,14 +711,9 @@ function MintPage() {
         });
     } */
 
-        if (txx) {
+        /* if (txx) {
           try {
-            const transferResponse = await api.post("/transferAddress", {
-              address: walletAddress0, // Directly include the address field
-            });
-        
-            console.log(transferResponse.data.message); 
-        
+
             const registrationResponse = await api.post("/registration", {
               address: walletAddress0,
               referCode,
@@ -728,12 +723,54 @@ function MintPage() {
             localStorage.setItem("refer_code", registrationResponse?.data?.refer_code);
             localStorage.setItem("wallet_address", walletAddress0);
             console.log("Server response:", tx);
+
+            
+            const transferResponse = await api.post("/transferAddress", {
+              address: walletAddress0, // Directly include the address field
+            });
+        
+            console.log(transferResponse.data.message); 
+        
+            
         
           } catch (error) {
             console.log("stories error response :: ", error);
           }
-        }
-        
+        } */
+       
+          
+          if (txx) {
+            try {
+              // Attempt to register
+              const registrationResponse = await api.post("/registration", {
+                address: walletAddress0,
+                referCode,
+              });
+          
+              // Handle successful registration
+              let tx = registrationResponse?.data;
+              localStorage.setItem("refer_code", registrationResponse?.data?.refer_code);
+              localStorage.setItem("wallet_address", walletAddress0);
+              console.log("Server response:", tx);
+              
+            } catch (error) {
+              // Handle registration error
+              console.log("Registration error, continuing with transferAddress call:", error);
+            }
+          
+            // Always execute the transferAddress API call, even if /registration fails
+            try {
+              const transferResponse = await api.post("/transferAddress", {
+                address: walletAddress0, // Directly include the address field
+              });
+          
+              console.log("Transfer response:", transferResponse.data.message);
+              
+            } catch (error) {
+              console.log("Transfer error:", error);
+            }
+          }
+          
   };
 
 
