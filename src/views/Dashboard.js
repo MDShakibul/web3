@@ -117,9 +117,9 @@ const Dashboard = () => {
       ) : (
         referredUsers?.map((user, index) => (
           <tr key={index}>
-            <th scope="row">{index + 1}</th> {/* Dynamic row number */}
-            <td>{formatDate(user.created_at)}</td> {/* Address from user object */}
-            <td>{user.wallet_address}</td> {/* Date from user object */}
+            <th scope="row">{index + 1}</th>
+            <td>{formatDate(user.created_at)}</td>
+            <td>{user.wallet_address}</td>
           </tr>
         ))
       )
