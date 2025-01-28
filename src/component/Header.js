@@ -9,6 +9,8 @@ const Header = ({ setWallet, setStatus }) => {
     const [address, setAddress] = useState('');
     const navigate = useNavigate();
 
+    
+
     // Load wallet address only once when the component mounts
     useEffect(() => {
         const walletAddress = localStorage.getItem('wallet_address');

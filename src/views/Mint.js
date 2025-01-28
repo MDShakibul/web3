@@ -255,7 +255,7 @@ function MintPage() {
 
   const addTimer = () => {
     // Set the countdown date
-    const countDownDate = new Date("Jan 17, 2025 23:59:59").getTime();
+    const countDownDate = new Date("Apr 03, 2025 23:59:59").getTime();
 
     // Get the elements to display the days, hours, minutes, and seconds
     const showDays = document.querySelectorAll(".show_day");
