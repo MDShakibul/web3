@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+@media screen and (max-width: 480px) {
+  .all-users-table-header{
+    font-size: 10px;
+  }
+  .all-users-table-body{
+    font-size: 8px;
+    align-items: center;
+  }
+}

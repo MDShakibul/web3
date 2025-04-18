@@ -146,7 +146,7 @@ function AllUsers() {
             
 
 
-            <table className="table table-striped" style={{ backgroundColor: 'transparent', color: '#fff' }}>
+            <table className="table table-striped table-responsive all-users-table-header" style={{ backgroundColor: 'transparent', color: '#fff' }}>
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -155,7 +155,7 @@ function AllUsers() {
                   <th scope="col">Referred By</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="all-users-table-body">
                 {
                   allUsers?.length === 0 ? (
                     <tr>
@@ -164,7 +164,7 @@ function AllUsers() {
                   ) : (
                     allUsers?.map((user, index) => (
                       <tr key={index}>
-                        <th scope="row">{index + 1}</th> 
+                        <th scope="row" >{index + 1}</th> 
                         <td>{formatDate(user.created_at)}</td> 
                         <td>{user.wallet_address}</td>
                         <td>{user.referred_by ? user.referred_by : '-'}</td>

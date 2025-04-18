@@ -37,7 +37,7 @@ const Dashboard = () => {
       }, [address]);
 
 
-    const shareLink = (code) => {
+/*     const shareLink = (code) => {
         const shareUrl = `${window.location.origin}/?refer_code=${code}`;
         const shareText = "Refer code for join";
     
@@ -55,8 +55,39 @@ const Dashboard = () => {
             "https:google.com"
           );
         }
+      }; */
+    
+    	const shareLink = (code) => {
+        const shareUrl = `${window.location.origin}/?referCode=${code}`;
+        const shareText = 'Refer code for join';
+      
+        if (navigator.share) {
+          navigator
+            .share({
+              title: 'Referral',
+              text: shareText,
+              url: shareUrl,
+            })
+            .then(() => console.log('Shared successfully'))
+            .catch((error) => console.error('Error sharing:', error));
+        } else if (navigator.clipboard) {
+          // Copy to clipboard as fallback
+          navigator.clipboard.writeText(`${shareUrl}`)
+            .then(() => alert('Copied to clipboard!'))
+            .catch(err => console.error('Failed to copy:', err));
+        } else {
+          // Extra fallback for very old browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = `${shareUrl}`;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        }
       };
-    return (
+
+      
+      return (
         <div className="v_dark loaded" data-spy="scroll" data-offset="110">
         <div className="parallax-mirror div1-4">
           <img className="parallax-slider img1-4" src={token_bg} alt="Token background" />
